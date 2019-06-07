@@ -1,0 +1,43 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Nuevo Cliente potencial
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/clientes-potenciales/nuevo", method="POST" )
+                                    #nuevo_potencial
+                                        .form-group  
+                                            p Nombre completo
+                                            input.form-control(type="text" placeholder="Nombre Completo" name="nombreCompleto")
+                                        .form-group  
+                                            p DNI
+                                            input.form-control(type="text" placeholder="Ingresar DNI" name="dni")
+                                        .form-group 
+                                            p Teléfono
+                                            input.form-control(type="tel" placeholder="Teléfono" name="telefono")
+                                        .form-group 
+                                            p Celular
+                                            input.form-control(type="tel" placeholder="Celular" name="celular")
+                                        .form-group 
+                                            p Correo Electrónico
+                                            input.form-control(type="email" placeholder="Correo Electrónico" name="email")
+                                    .form-group 
+                                        p Curso
+                                        select.form-control.select2(name="cursoId")
+                                            each curso in cursos
+                                                option(value=curso._id)= curso.codigo +' - '+curso.softwareName
+
+                                    input(type="hidden", value=usuario._id, name="vendedorAsignado")
+                                    input(type="hidden", value=usuario.nombreCompleto, name="vendedorAsignadoNombre")
+                                    a.btn.btn-secondary(href="/ventas/reserva/todos" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../footer 

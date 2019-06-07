@@ -1,0 +1,146 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        .row.mb-5
+                            .col-md-12   
+                                a.btn.btn-primary.c-white(href='/ventas/reservas')
+                                    i.c-white-500.ti-arrow-left.mr-2
+                                    = 'Anterior'
+                        h4.c-grey-900.mT-10.mB-30 Reservas
+                        .row.align-items-center.mb-4
+                            .col-md-auto
+                                if curso.cupos > reservas.length
+                                    a.btn.btn-primary.c-white(href='/ventas/reserva/nuevo/'+curso.codigo)
+                                        i.c-white-500.ti-plus.mr-2
+                                        = 'Agregar reserva'  
+                            .col
+                                h6.c-grey-900.mb-0 Vacantes:
+                                    - var reservasCantidad
+                                    - if(reservas.length) reservasCantidad = reservas.length;
+                                    - else reservasCantidad = 0;
+                                    = curso.cupos  - reservasCantidad
+                        .row
+                            .col-md-12
+                                h5.c-grey-900.mb-3 Matriculados
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Vendedor
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Telefono
+                                                    th Celular
+                                                    th Email   
+                                                    th fecha de reserva
+                                                    th Monto Pagado
+                                                    th Comentarios
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Vendedor
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Telefono
+                                                    th Celular
+                                                    th Email   
+                                                    th fecha de reserva
+                                                    th Monto Pagado
+                                                    th Comentarios
+                                                    th
+                                            tbody
+                                                if reservas
+                                                    each reserva in reservas
+                                                        tr   
+                                                            td= reserva.vendedorNombre
+                                                            td= reserva.potencialNombre
+                                                            td= reserva.dni
+                                                            td= reserva.telefono
+                                                            td= reserva.celular
+                                                            td= reserva.email
+                                                            td
+                                                                - var fecha = new Date(reserva.fechaReserva);
+                                                                = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear()
+
+                                                            
+                                                            td= 'S/.'+reserva.montoPagado
+                                                            td= reserva.comentarios
+                                                            td.text-right
+                                                                a.c-green-500.mr-4(href='/ventas/pagos/nuevo/'+reserva._id)
+                                                                    i.c-white-500.ti-plus.mr-2
+                                                                    = 'Pago'
+                                                                - var editarLink = "/ventas/reserva/editar/"+reserva._id;
+                                                                a.editar(href=editarLink)
+                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                - var eliminarLink = "/ventas/reserva/borrar/"+reserva.cursoCodigo+'/'+reserva._id;
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                        .row
+                            .col-md-12
+                                h5.c-grey-900.mb-3 Pendientes
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Vendedor
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Telefono
+                                                    th Celular
+                                                    th Email   
+                                                    th fecha de reserva
+                                                    th Monto Pagado
+                                                    th Comentarios
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Vendedor
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Telefono
+                                                    th Celular
+                                                    th Email   
+                                                    th fecha de reserva
+                                                    th Monto Pagado
+                                                    th Comentarios
+                                                    th
+                                            tbody
+                                                if pendientes
+                                                    each pendiente in pendientes
+                                                        tr   
+                                                            td= pendiente.vendedorNombre
+                                                            td= pendiente.potencialNombre
+                                                            td= pendiente.dni
+                                                            td= pendiente.telefono
+                                                            td= pendiente.celular
+                                                            td= pendiente.email
+                                                            td
+                                                                - var fecha = new Date(pendiente.fechaReserva);
+                                                                = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear()
+
+                                                            
+                                                            td= 'S/.'+pendiente.montoPagado
+                                                            td= pendiente.comentarios
+                                                            td.text-right
+                                                                a.c-green-500.mr-4(href='/ventas/pagos/nuevo/'+pendiente._id)
+                                                                    i.c-white-500.ti-plus.mr-2
+                                                                    = 'Pago'
+                                                                - var editarLink = "/ventas/reserva/editar/"+pendiente._id;
+                                                                a.editar(href=editarLink)
+                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                - var eliminarLink = "/ventas/reserva/borrar/"+pendiente.cursoCodigo+'/'+pendiente._id;
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                    
+
+    include ../../footer 

@@ -1,0 +1,40 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar Reserva
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/reserva/nuevo", method="POST" )
+                                    .form-group
+                                        p Fecha de reserva
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de reserva', name="fecha_reserva", data-provide='datepicker' value=ventas.fecha_reserva )
+                                    .form-group 
+                                        p Curso
+                                        select.form-control(name="id_c")
+                                            each curso in cursos
+                                                if curso.id_c == ventas.id_c        
+                                                    option(selected value=ventas.id_c)= curso.codigo + ' '
+                                                        each software in softwares
+                                                            if curso.id_s == software.id_s
+                                                                = software.name
+                                                option(value=curso.id_c)= curso.codigo + ' '
+                                                    each software in softwares
+                                                        if curso.id_s == software.id_s
+                                                            = software.name
+                                    input(type="hidden", value=user, name="vendedor")
+                                    a.btn.btn-secondary(href="/ventas/reserva/todos" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../footer 

@@ -1,0 +1,145 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        a.btn.btn-primary.c-white.mb-4(href='/ventas/clientes-potenciales')
+                          i.c-white-500.ti-arrow-left.mr-2
+                          = 'Anterior'
+                        .row.mb-4
+                            .col-md-12
+                              .bd.bgc-white.p-20
+                                h4.c-grey-900.mb-4 Datos del cliente
+                                .row
+                                  .col-md-6
+                                    p Nombre Completo:
+                                      strong.ml-2= potencial.nombreCompleto
+                                  .col-md-6
+                                    p DNI:
+                                      strong.ml-2= potencial.dni
+                                  .col-md-6
+                                    p Corre Electrónico:
+                                      strong.ml-2= potencial.email
+                                  .col-md-6
+                                    p Teléfono:
+                                      strong.ml-2= potencial.telefono
+                                  .col-md-6
+                                    p Celular:
+                                      strong.ml-2= potencial.celular
+
+                        .row
+                            .col-md-6
+                                .bd.bgc-white.p-20
+                                  h4.c-grey-900 Actividades
+                                  .layers
+                                    .layer.w-100.mB-10
+                                    .layer.w-100
+                                      ul.list-task.list-group(data-role='tasklist')
+                                        li.list-group-item.bdw-0(data-role='task')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall2')
+                                              span.peer.peer-greed Book Boss Flight
+                                                span.badge.badge-pill.ml-3.badge-success.lh-0.p-10 Hace 2 horas
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                        li.list-group-item.bdw-0(data-role='task')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall3')
+                                              span.peer.peer-greed Hit the Gym
+                                                span.badge.badge-pill.ml-3.badge-danger.lh-0.p-10 Hace 15 dias
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                      hr
+                                      form(action="")
+                                        .form-group
+                                          input.form-control.bdc-grey-200(type="text" name="actividad" placeholder="Actividad")
+
+                                        .text-right
+                                          input.btn.btn-primary(type='submit' value="Agregar Actividad") 
+                            .col-md-6
+                                .bd.bgc-white.p-20
+                                  h4.c-grey-900 Tareas
+                                  .layers
+                                    .layer.w-100.mB-10
+                                    .layer.w-100
+                                      ul.list-task.list-group(data-role='tasklist')
+                                        li.list-group-item.bdw-0(data-role='task')
+                                          .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                            input#inputCall1.peer(type='checkbox', name='inputCheckboxesCall')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall1')
+                                              span.peer.peer-greed Call John for Dinner
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                        li.list-group-item.bdw-0(data-role='task')
+                                          .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                            input#inputCall2.peer(type='checkbox', name='inputCheckboxesCall')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall2')
+                                              span.peer.peer-greed Book Boss Flight
+                                                span.badge.badge-pill.ml-3.badge-success.lh-0.p-10 2 Days
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                        li.list-group-item.bdw-0(data-role='task')
+                                          .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                            input#inputCall3.peer(type='checkbox', name='inputCheckboxesCall')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall3')
+                                              span.peer.peer-greed Hit the Gym
+                                                span.badge.badge-pill.ml-3.badge-danger.lh-0.p-10 3 Minutes
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                        li.list-group-item.bdw-0(data-role='task')
+                                          .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                            input#inputCall5.peer(type='checkbox', name='inputCheckboxesCall')
+                                            label.peers.peer-greed.js-xsb.ai-c(for='inputCall5')
+                                              span.peer.peer-greed Watch Game of Thrones Episode
+                                                span.badge.badge-pill.ml-3.badge-info.lh-0.p-10 Tomorrow
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                        li.list-group-item.bdw-0(data-role='task')
+                                          .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                            input#inputCall6.peer(type='checkbox', name='inputCheckboxesCall')
+                                            label.peers.peer-greed.js-sb.ai-c(for='inputCall6')
+                                              span.peer.peer-greed 
+                                                span.mr-3 Give Purchase report
+                                                span.badge.badge-pill.badge-success.lh-0.p-10 Done
+                                              span.peers
+                                                a.borrar(href='#')
+                                                  i.c-red-500.ti-close
+                                      hr
+                                      form(action="")
+                                        .form-group
+                                          input.form-control.bdc-grey-200(type="text" name="tarea" placeholder="Tarea")
+
+                                        .row
+                                          .col-md-6
+                                            .form-group
+                                              .timepicker-input.input-icon.form-group
+                                                  .input-group
+                                                      .input-group-addon.bgc-white.bd.bdwR-0
+                                                          i.ti-calendar
+                                                      input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha', name="fecha", data-provide='datepicker' )
+                                          .col-md-6
+                                            .form-group
+                                              .timepicker-input.input-icon.form-group
+                                                  .input-group
+                                                      .input-group-addon.bgc-white.bd.bdwR-0
+                                                          i.ti-calendar
+                                                      input.form-control.bdc-grey-200.time-date(type='text', class="time-date", placeholder='Hora', name="hora")
+
+                                        .text-right
+                                          input.btn.btn-primary(type='submit' value="Agregar Tarea") 
+                            
+                       
+
+
+
+    include ../footer 

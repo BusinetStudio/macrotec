@@ -1,0 +1,57 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Pagos
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Documento
+                                                    th Monto
+                                                    th Fecha
+                                                    th Deposito
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Documento
+                                                    th Monto
+                                                    th Fecha
+                                                    th Deposito
+                                                    th
+                                            tbody
+                                                if pagos
+                                                    each pago in pagos
+                                                        tr
+                                                            td= pago.clienteNombre
+                                                            td= pago.dni
+                                                            td= pago.documento
+                                                            td= 'S/. '+pago.monto
+                                                            td  
+                                                                - var fecha = new Date(pago.fecha);
+                                                                = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear()
+                                                            td
+                                                                a(target="_blank", href=pago.imgDeposito) Ver deposito
+                                                            td.text-right
+                                                                - var editarLink = "/ventas/pagos/editar/"+pago._id;
+                                                                a.editar(href=editarLink)
+                                                                    i.c-orange-500.ti-pencil.mr-2                                                                    
+                                                                - var eliminarLink = "/ventas/pagos/borrar/"+pago.reserva+"/"+pago._id;
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                    
+    include ../../footer 

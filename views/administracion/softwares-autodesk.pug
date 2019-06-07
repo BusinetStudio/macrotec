@@ -1,0 +1,73 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Gestión de Productos
+                        p= baseUrl
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative
+                                    h4.c-grey-900.mB-20 Agregar nuevo producto:
+                                    form(action="/administracion/productos/nuevo" method="POST")
+                                        .row 
+                                            .col-12.col-md-3.mb-3
+                                                .form-group
+                                                    input.form-control(type="text", placeholder="Nombre del Producto", name="nombre")
+                                            .col-12.col-md-3.mb-3
+                                                .form-group
+                                                    input.form-control(type="text", placeholder="Codigo", name="codigo")                                            
+                                            .col-12.col-md-3.mb-3
+                                                .form-group
+                                                    input(type="submit" value="Crear" class="btn btn-primary")
+                                        
+
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Nombre del Producto
+                                                    th Codigo   
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Nombre del producto
+                                                    th Codigo
+                                                    th
+                                            tbody
+                                                if softwares
+                                                    each software in softwares
+                                                        tr
+                                                            td= software.nombre
+                                                            td= software.codigo
+                                                            td.text-right
+                                                                a.editar(href="#", data-toggle="modal", data-target="#editarModal", data-id=software._id, data-nombre=software.nombre, data-codigo=software.codigo)
+                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                a.borrar(href='/administracion/productos/eliminar/'+software._id)
+                                                                    i.c-red-500.ti-close
+                                    #editarModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editarModalLabel', aria-hidden='true')
+                                        .modal-dialog(role='document')
+                                            .modal-content
+                                                form(action="/administracion/productos/editar", method="POST")
+                                                    .modal-header
+                                                        h5#editarModalLabel.modal-title Editar Producto
+                                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                            span(aria-hidden='true') ×
+                                                    .modal-body
+                                                        p Nombre del Producto
+                                                        .form-group
+                                                            input.form-control(type="text", name="nombre")
+                                                        p Codigo
+                                                        .form-group
+                                                            input.form-control(type="text", name="codigo")
+                                                        input(type="hidden", id="elId", name="id")
+                                                    .modal-footer
+                                                        button.btn.btn-secondary(type='button', data-dismiss='modal') Cerrar
+                                                        input.btn.btn-primary(type='submit' value="Guardar")       
+    include ../footer 

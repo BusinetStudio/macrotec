@@ -1,0 +1,59 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Seleccionar curso
+                        .row
+                            .col-12.col-md-3
+                                p Codigo
+                                .form-group
+                                    select.tabla-filtro.form-control.select2(data-index="0")
+                                        option(select disabled) Seleccionar codigo
+                                        if cursos
+                                            each curso in cursos
+                                                option(value=curso.codigo)= curso.codigo
+                                       
+                            
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+
+                                        table#dataTable.table.table-striped.table-bordered.table-hover(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Codigo
+                                                    th Software
+                                                    th Modalidad
+                                                    th Fecha
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Codigo
+                                                    th Software
+                                                    th Modalidad
+                                                    th Fecha
+                                                    th
+                                            tbody
+                                                if cursos
+                                                    each curso in cursos
+                                                        tr      
+                                                            td= curso.codigo
+                                                            td= curso.softwareName
+                                                            td= curso.modalidad
+                                                            td
+                                                                - var fechaInicio = new Date(curso.fecha_inicio);
+                                                                = fechaInicio.getDate() + '/' + (fechaInicio.getMonth() + 1) + '/' + fechaInicio.getFullYear()
+                                                            td.text-center
+                                                                a(href='/ventas/reservas/'+curso.codigo)
+                                                                    i.c-green-500.ti-arrow-right.mr-2(style="font-size:22px")              
+    
+    
+    include ../../footer 

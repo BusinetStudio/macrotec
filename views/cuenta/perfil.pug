@@ -1,0 +1,8 @@
+if usuario.tipoUsuario == "Admin"
+  include ./perfil-admin
+else if usuario.tipoUsuario == "Profesor"
+  include ./perfil-profesor
+else if usuario.tipoUsuario == "Alumno"
+  include ./perfil-alumno
+else if usuario.tipoUsuario == "Vendedor"
+  include ./perfil-vendedor

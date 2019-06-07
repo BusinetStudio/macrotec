@@ -1,0 +1,82 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Clientes Potenciales
+                        .row
+                            .col-12.mb-3
+                                .form-group
+                                    a(href="/ventas/clientes-potenciales/nuevo" class="btn btn-primary") Nueva Cliente potencial
+                        .row
+                            .col-12.col-md-3
+                                p.mb-2 Vendedor
+                                .form-group
+                                    select.tabla-filtro.form-control.select2(data-index="0")
+                                        option(disabled selected) Seleccionar Vendedor
+                                        each vendedor in vendedores
+                                            option= vendedor.nombreCompleto
+                            .col-12.col-md-3
+                                p.mb-2 Curso de Interes
+                                .form-group
+                                    select.tabla-filtro.form-control.select2(data-index="3")
+                                        option(select disabled) Seleccionar curso
+                                        each curso in cursos
+                                            option(value=curso.codigo+' - '+curso.softwareName)= curso.codigo+' - '+curso.softwareName
+                            .col-md-3   
+                                p.mb-2 DNI
+                                .form-group
+                                    input.tabla-filtro.form-control(data-index="1", placeholder="Ingresar DNI")
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Vendedor
+                                                    th DNI
+                                                    th Nombre y Apellido
+                                                    th Teléfono
+                                                    th Celular
+                                                    th Email
+                                                    th Curso de interes
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Vendedor
+                                                    th DNI
+                                                    th Nombre y Apellido
+                                                    th Teléfono
+                                                    th Celular
+                                                    th Email
+                                                    th Curso de interes
+                                                    th
+                                            tbody
+                                                if potenciales
+                                                    each potencial in potenciales
+                                                        tr    
+                                                            
+                                                            td= potencial.vendedorAsignadoNombre  
+                                                            td= potencial.dni 
+                                                            td= potencial.nombreCompleto
+                                                            td= potencial.telefono
+                                                            td= potencial.celular
+                                                            td= potencial.email
+                                                            td(width="200")= potencial.cursoInteresCodigo+' - '+potencial.cursoInteres
+                                                            td.text-right
+                                                                a.editarSidebar(href="/ventas/actividades/"+potencial._id)
+                                                                    i.c-green-500.ti-layout-list-thumb.mr-4
+                                                                a.editarSidebar(href="/ventas/clientes-potenciales/editar/"+potencial._id)
+                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                - var eliminarLink = "/ventas/clientes-potenciales/borrar/"+potencial._id;
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                  
+    include ../footer 

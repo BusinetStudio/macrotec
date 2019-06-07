@@ -1,0 +1,47 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar Cliente potencial
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/clientes-potenciales/editar/", method="POST" )
+                                    .form-group  
+                                        p Nombre completo
+                                        input.form-control(type="text", value=potencial.nombreCompleto, placeholder="Nombre Completo", name="nombreCompleto")
+                                    .form-group  
+                                        p DNI
+                                        input.form-control(type="text" value=potencial.dni  placeholder="Ingresar DNI" name="dni")
+                                    .form-group 
+                                        p Teléfono
+                                        input.form-control(type="tel" value=potencial.telefono placeholder="Teléfono" name="telefono")
+                                    .form-group 
+                                        p Celular
+                                        input.form-control(type="tel" value=potencial.celular placeholder="Celular" name="celular")
+                                    .form-group 
+                                        p Correo Electrónico
+                                        input.form-control(type="email" value=potencial.email placeholder="Correo Electrónico" name="email")
+                                    
+                                    .form-group.mt-4 
+                                        p Curso
+                                        select.form-control.select2(name="cursoId")
+                                            opntion(selected, disabled) Selecciona un curso
+                                            each curso in cursos
+                                                if curso.codigo == potencial.cursoInteresCodigo
+                                                    option(selected, value=curso._id)= curso.codigo +' - '+curso.softwareName
+                                                else    
+                                                    option( value=curso._id)= curso.codigo +' - '+curso.softwareName
+                                    input(type="hidden", value=usuario._id, name="vendedorAsignado")
+                                    input(type="hidden", value=usuario.nombreCompleto, name="vendedorAsignadoNombre")
+                                    input(type="hidden", value=potencial._id, name="_id")
+                                    a.btn.btn-secondary(href="/ventas/clientes-potenciales" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../footer 

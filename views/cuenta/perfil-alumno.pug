@@ -1,0 +1,168 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar Perfil
+                        form(action="/cuenta/perfil/", class="bd bgc-white p-20" method="POST" )
+                            p.font-weight-bold Datos Personales
+                            .row
+                                .col-md-6
+                                    .form-group 
+                                        p Nombre Completo
+                                        input.form-control(type="text", value=usuario.dni, name="nombreCompleto")
+                                .col-md-6
+                                    .form-group
+                                        p DNI
+                                        input.form-control(type="text", value=usuario.dni, name="dni")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Email
+                                        input.form-control(type="email", value=usuario.email, name="email")
+                                .col-md-6
+                                    .form-group
+                                        p Fecha de Nacimiento
+                                        input.form-control(type="date", value=usuario.fechaNacimiento, name="fechaNacimiento")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Genero
+                                        select.form-control(name="genero")
+                                            if usuario.genero == 'Masculino'
+                                                option(selected) Masculino
+                                                option Femenino
+                                            else if usuario.genero == 'Femenino'
+                                                option(selected) Femenino
+                                                option Masculino
+                                            else
+                                                option(selected disabled) Seleccionar genero
+                                                option Femenino
+                                                option Masculino
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Dirección
+                                        input.form-control(type="text", value=usuario.direccion, name="direccion")
+                                .col-md-6
+                                    .form-group
+                                        p Distrito
+                                        input.form-control(type="text", value=usuario.distrito name="distrito")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p teléfono
+                                        input.form-control(type="text", value=usuario.telefono, name="telefono")
+                                .col-md-6
+                                    .form-group
+                                        p celular
+                                        input.form-control(type="text", value=usuario.celular,  name="celular")
+                            hr
+                            p.font-weight-bold Datos Academicos y de trabajo
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Universidad o Instituto
+                                        input.form-control(type="text", vaue=usuario.intituto name="instituto")
+                                .col-md-6
+                                    .form-group
+                                        p Carrera u Ocupación
+                                        input.form-control(type="text", value=usuario.carrera, name="carrera")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Dominio de ingles
+                                        select.form-control( name="ingles")
+                                            if usuario.ingles == 'Basico'
+                                                option(selected) Basico
+                                                option Intermedio
+                                                option Avanzado
+                                            else if usuario.ingles == 'Intermedio'
+                                                option(selected) Intermedio
+                                                option basico
+                                                option Avanzado
+                                            else if usuario.ingles == 'Avanzado'
+                                                option(selected) Avanzado
+                                                option basico
+                                                option Intermedio
+                                            else
+                                                option(selected disabled) Seleccionar genero
+                                                option Basico
+                                                option Intermedio
+                                                option Avanzado
+                                .col-md-6
+                                    .form-group
+                                        p Empresa donde Labora
+                                        input.form-control(type="text", vaue=usuario.empresaLabora name="empresaLabora")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p RUC de la empresa
+                                        input.form-control(type="text", value=usuario.rucEmpresa, name="rucEmpresa")
+                                .col-md-6
+                                    .form-group
+                                        p Dirección de la Empresa
+                                        input.form-control(type="text", vaue=usuario.direccionEmpresa name="direccionEmpresa")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Distrito de la empresa
+                                        input.form-control(type="text", value=usuario.distritoEmpresa, name="distritoEmpresa")
+                                .col-md-6
+                                    .form-group
+                                        p Cargo
+                                        input.form-control(type="text", vaue=usuario.cargoEmpresa name="cargoEmpresa")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Email de la empresa
+                                        input.form-control(type="text", value=usuario.emailEmpresa, name="emailEmpresa")
+                                .col-md-6
+                                    .form-group
+                                        p Teléfono de la empresa
+                                        input.form-control(type="text", vaue=usuario.telefonoEmpresa name="telefonoEmpresa")
+                            
+                            hr
+                            p.font-weight-bold Información adicional
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p ¿Cómo se entero del curso?
+                                        input.form-control(type="text", vaue=usuario.comoSeEntero name="comoSeEntero")
+                                .col-md-6
+                                    .form-group
+                                        p ¿Por qué eligió Macrotec para especializarse?
+                                        input.form-control(type="text", value=usuario.porQueMacrotec, name="porQueMacrotec")
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p ¿Qué otro curso Autodesk desearía aprender?
+                                        input.form-control(type="text", vaue=usuario.cursoInteres name="cursoInteres")
+                                .col-md-6
+                                    .form-group
+                                        p ¿Desería ingresar a nuesta Bolsa de Trabajo?
+                                        select.form-control(name="bolsaTrabajo")
+                                            if usuario.bolsaTrabajo == 'Si' 
+                                                option(selected) Si
+                                                option No
+                                            else if usuario.bolsaTrabajo == 'No'
+                                                option(selected) No
+                                                option Si
+                                            else
+                                                option(selected disabled) Seleccionar opción
+                                                option Si
+                                                option No
+                                
+
+                            .row.pt-5
+                                .col-md-12
+                                    a.btn.btn-secondary(href="/home" class="mr-2") Cancelar  
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../footer 

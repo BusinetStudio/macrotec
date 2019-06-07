@@ -1,0 +1,87 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Gestión de Cursos
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative
+                                    h4.c-grey-900.mB-20 Listado de cursos:
+                                    .text-center.text-md-right.mb-3
+                                        a(href="/administracion/cursos/nuevo" class="btn btn-primary") Crear nuevo curso
+
+
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Codigo
+                                                    th Nombre del Software
+                                                    th Sede
+                                                    th Modalidad
+                                                    th Aula
+                                                    th Cupos
+                                                    th Clases
+                                                    th Profesor
+                                                    th Fecha
+                                                    th Horas
+                                                    th Dias
+                                                    th Precio
+                                                    th Cuotas
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Codigo
+                                                    th Nombre del Software
+                                                    th Sede
+                                                    th Modalidad
+                                                    th Aula
+                                                    th Cupos
+                                                    th Clases
+                                                    th Profesor
+                                                    th Fecha
+                                                    th Horas
+                                                    th Dias
+                                                    th Precio
+                                                    th Cuotas
+                                                    th
+                                            tbody
+                                                each curso in cursos
+                                                    tr
+                                                        td
+                                                            = curso.codigo 
+                                                        td= curso.softwareName
+                                                        td= curso.sede
+                                                        td= curso.modalidad
+                                                        td= curso.aula
+                                                        td= curso.cupos
+                                                        td= curso.clases
+                                                        td
+                                                            each profesor in profesores
+                                                                if profesor._id == curso.profesor
+                                                                    = profesor.nombreCompleto
+                                                        td
+                                                            - var fechaInicio = new Date(curso.fecha_inicio);
+                                                            - var fechaFin = new Date(curso.fecha_fin);
+                                                            = fechaInicio.getDate() + '/' + (fechaInicio.getMonth() + 1) + '/' + fechaInicio.getFullYear() + ' - ' + fechaFin.getDate() + '/' + (fechaFin.getMonth() + 1) + '/' + fechaFin.getFullYear()
+                                                        td
+                                                            = curso.hora_inicio+' - '+curso.hora_fin
+                                                        td= curso.dias
+                                                        td= 'S/.'+curso.precio
+                                                        td= curso.cuotas
+                                                        - var deleteUrl = "/administracion/cursos/eliminar/"+curso._id
+                                                        - var editUrl = "/administracion/cursos/editar/"+curso._id
+                                                        td.text-right
+                                                            a.editar(href=editUrl)
+                                                                i.c-orange-500.ti-pencil.mr-2
+                                                            a.borrar(href=deleteUrl)
+                                                                i.c-red-500.ti-close
+                                                
+    include ../footer 

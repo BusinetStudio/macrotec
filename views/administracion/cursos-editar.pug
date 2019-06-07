@@ -1,0 +1,118 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar Curso
+                        .row.justify-content-center
+                            .col-md-6
+                                - var editLink = "/administracion/cursos/editar/";
+                                form(action=editLink, method="POST" )
+                                    .form-group 
+                                        p Nombre del Software
+                                        select.form-control(name="software")
+                                            each software in productos
+                                                if software._id == datos._id
+                                                    option(selected value=software._id)= software.nombre
+                                            each software in productos
+                                                option(value=software._id)= software.nombre
+                                    .form-group
+                                        p Sede
+                                        select.form-control(name="sede" value=datos.sede)
+                                            option(value="Jesus Maria") Jesus Maria
+                                            option(value="Santiago de Surco") Santiago de Surco
+                                    .form-group
+                                        p Modalidad
+                                        select.form-control(name="modalidad" value=datos.modalidad)
+                                            option(value="Presencial") Presencial
+                                            option(value="Online") Online
+                                    .form-group
+                                        p Aula
+                                        input.form-control(type="number" placeholder="aula" name="aula" min="1" value=datos.aula)
+                                    .form-group
+                                        p Cupos
+                                        input.form-control(type="number" placeholder="Cupos" name="cupos" min="1" value=datos.cupos) 
+                                    .form-group
+                                        p Clases
+                                        input.form-control(type="number" placeholder="Clases" name="clases" min="1" value=datos.clases)
+                                    .form-group
+                                        p Profesor
+                                        select.form-control(name="profesor")
+                                            each profesor in profesores
+                                                if profesor._id == datos.profesor
+                                                    option(value=profesor.id_u selected)= profesor.nombreCompleto
+                                            each profesor in profesores
+                                                option(value=profesor.id_u)= profesor.nombreCompleto
+                                    .form-group
+                                        p Fecha Inicio
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de Inicio', name="fecha_inicio", data-provide='datepicker' value=datos.fecha_inicio)
+                                    .form-group
+                                        p Fecha Fin
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de Fin', name="fecha_fin", data-provide='datepicker' value=datos.fecha_fin)
+                                    .form-group
+                                        p Hora Inicio
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.time-date(type='text', class="time-date", placeholder='Hora Inicio', name="hora_inicio" value=datos.hora_inicio)
+                                    .form-group
+                                        p Hora Fin
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.time-date(type='text', class="time-date", placeholder='Hora Fin', name="hora_fin" value=datos.hora_fin)
+                                   
+                                    .form-group
+                                        p Dias
+                                        input.diasCheckbox(type="checkbox", value="lunes", name="dias") 
+                                        span(class="ml-1 mr-2") Lunes
+                                        input.diasCheckbox(type="checkbox", value="martes", name="dias") 
+                                        span(class="ml-1 mr-2") Martes
+                                        input(type="checkbox" class="diasCheckbox" value="miercoles" name="dias") 
+                                        span(class="ml-1 mr-2") Miercoles
+                                        input(type="checkbox" class="diasCheckbox" value="jueves" name="dias")
+                                        span(class="ml-1 mr-2") Jueves
+                                        input(type="checkbox" class="diasCheckbox" value="viernes" name="dias")
+                                        span(class="ml-1 mr-2") Viernes
+                                        input(type="checkbox" class="diasCheckbox" value="sábado" name="dias")
+                                        span(class="ml-1 mr-2") Sábado
+                                    .form-group
+                                        p Precio en Soles
+                                        input.form-control(type="number" placeholder="Precio" name="precio" min="1" value=datos.precio)
+                                    .form-group 
+                                        p Cuotas
+                                        input.form-control(type="number" placeholder="Cuotas" name="cuotas" min="1" value=datos.cuotas)
+
+                                    input(type="hidden", value=datos._id, name="_id")
+                                    a.btn.btn-secondary(href="/administracion/cursos" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+        script(type='text/javascript').
+            var dias = "#{datos.dias}";
+            var diasArr = dias.split(',');
+            document.querySelectorAll('input.diasCheckbox').forEach(function(node) {
+                for(var i=0; i<diasArr.length; i++){
+                    var name = diasArr[i];
+                    if(name == node.value){
+                        node.checked = true;
+                    break;
+                    }
+                }
+            });
+                    
+    include ../footer 

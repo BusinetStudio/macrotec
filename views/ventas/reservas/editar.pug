@@ -1,0 +1,43 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar reserva
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/reserva/editar/"+reserva._id, method="POST" )
+                                    input(type="hidden" value=reserva.cursoCodigo name="cursoCodigo")
+                                    h5.c-grey-900= reserva.cursoCodigo +' - '+reserva.cursoNombre
+                                    p Cliente: 
+                                      = reserva.dni +' - '+reserva.potencialNombre
+                                    .form-group
+                                        p Fecha de reserva
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', value=reserva.fechaReserva, name="fechaReserva", data-provide='datepicker' )
+                                   
+                                    
+                                    .form-group
+                                      p Estado
+                                      select.form-control(name="estado")
+                                        option(selected value=reserva.estado)= reserva.estado
+                                        if reserva.estado == 'Pendiente'
+                                          option(value="Matriculado") Matriculado
+                                        if reserva.estado == 'Matriculado'
+                                          option(value="Pendiente") Pendiente
+                                    .form-group
+                                        p Comentarios
+                                        textarea.form-control(placeholder="Comentarios" name="comentarios")= reserva.comentarios
+                                    a.btn.btn-secondary(href="/ventas/reservas/"+reserva.cursoCodigo class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../../footer 

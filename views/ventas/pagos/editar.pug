@@ -1,0 +1,37 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Nuevo Pago
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/pagos/editar/"+pago._id, method="POST", enctype="multipart/form-data" )
+                                    input(type='hidden' name="reserva" value=pago.reserva)
+                                    .form-group  
+                                        p Documento
+                                        input.form-control(type="text" value=pago.documento placeholder="Documento" name="documento")
+                                    .form-group  
+                                        p Monto
+                                        input.form-control(type="number" value=pago.monto placeholder="Monto" name="monto")
+                                    .form-group
+                                        p Fecha
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', value=pago.fecha placeholder='Fecha', name="fecha", data-provide='datepicker' )
+                                    .form-group  
+                                        p Imagen del deposito
+                                        input.form-control(type="file" name="imgDeposito" accept="image/png, image/jpeg, .pdf")
+                                    a.btn.btn-secondary(href="/ventas/pagos/" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                                    
+                    
+    include ../../footer 

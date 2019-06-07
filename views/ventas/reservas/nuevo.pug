@@ -1,0 +1,40 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Nueva reserva
+                        .row.justify-content-center
+                            .col-md-6
+                                form(action="/ventas/reserva/nuevo/"+curso.codigo, method="POST" )
+                                    input(type="hidden" name="vendedor" value=usuario._id)
+                                    input(type="hidden" name="vendedorNombre" value=usuario.nombreCompleto)
+                                    h5.c-grey-900= curso.codigo +' - '+curso.softwareName
+                                    input(type="hidden", name="curso" value=curso._id)
+                                    .form-group 
+                                        p Cliente
+                                        select.tabla-filtro.form-control.select2(name="potencial")
+                                            option(selected, disabled) Seleccionar cliente
+                                            each potencial in potenciales
+                                                option(value=potencial._id)= potencial.dni + ' - ' + potencial.nombreCompleto
+                                    .form-group
+                                        p Fecha de reserva
+                                        .timepicker-input.input-icon.form-group
+                                            .input-group
+                                                .input-group-addon.bgc-white.bd.bdwR-0
+                                                    i.ti-calendar
+                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de reserva', name="fechaReserva", data-provide='datepicker' )
+                                   
+                                    .form-group
+                                        p Comentarios
+                                        textarea.form-control(placeholder="Comentarios" name="comentarios")
+                                    a.btn.btn-secondary(href="/ventas/reservas/"+curso.codigo class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+                    
+    include ../../footer 

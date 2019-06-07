@@ -1,0 +1,54 @@
+extends ../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Editar Perfil
+                        form(action="/cuenta/perfil/", id="formulario", class="bd bgc-white p-20" method="POST" )
+                            p.font-weight-bold Datos Personales
+                            .row
+                                .col-md-6
+                                  .form-group 
+                                      p Nueva Contraseña
+                                      input.form-control(type="password",id="password" name="password")
+                              
+                                  .form-group
+                                      p Repetir Contraseña
+                                      input.form-control(type="password", id="repeatPass")
+                                .col-md-6
+                                  #responsePass
+                                
+
+                            .row.pt-5
+                                .col-md-12
+                                    a.btn.btn-secondary(href="/home" class="mr-2") Cancelar  
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+            script.
+              var validarContrasena = function (event) {
+                var password = document.getElementById('password');
+                var repeatPass = document.getElementById('repeatPass');
+                var formulario = document.getElementById('formulario');
+                var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,16}$/;
+                if(!regex.test(password.value)){
+                  document.getElementById('responsePass').innerHTML = '<p>La contraseña debe tener:<br> - Entre 8 y 16 caracteres<br> - Al menos un numero<br> - Al menos una minúscula<br> - Al menos una mayúscula.</p>'
+                  event.preventDefault();
+                  return false;
+                }else if(repeatPass.value != password.value){
+                  document.getElementById('responsePass').innerHTML = '<p>Las contraseñas no coinciden</p>'
+                  event.preventDefault();
+                  return false;
+                }else{
+                  document.getElementById('responsePass').innerHTML = ''
+                  return true;
+                }
+              };
+              formulario.addEventListener('submit', validarContrasena, false);
+              formulario.addEventListener('change', validarContrasena, false);
+                    
+    include ../footer 

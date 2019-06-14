@@ -47,7 +47,7 @@ router.post('/login', function(req, res, next){
     if(user){
       req.login(user, function(error) {
         if (error) return next(error);
-        return res.redirect('/home/');
+        return res.status(200);
       });
       return res.status(200);
     } else {

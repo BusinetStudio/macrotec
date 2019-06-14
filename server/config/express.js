@@ -35,7 +35,7 @@ if (!isProduction) {
 if(isProduction){
   mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect('mongodb://businetWeb:rogue195:*@ds237267.mlab.com:37267/heroku_nt68cjwd');
+  mongoose.connect('mongodb://ivan:rogue195@ds237267.mlab.com:37267/heroku_nt68cjwd');
   mongoose.set('debug', true);
 }
 require('../models');

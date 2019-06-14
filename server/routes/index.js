@@ -49,7 +49,7 @@ router.post('/login', function(req, res, next){
         if (error) return next(error);
         return res.redirect('/home/');
       });
-      return res.redirect('/home')
+      return res.status(200);
     } else {
       return res.status(422).json(info);
     }

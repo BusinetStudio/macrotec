@@ -42,7 +42,7 @@ require('../models');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session(
+app.use(express.session(
   {
   store: new SessionStore({
     url: 'mongodb://ivan:rogue195@ds237267.mlab.com:37267/heroku_nt68cjwd',

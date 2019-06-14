@@ -43,7 +43,7 @@ router.post('/login', function(req, res, next){
     req.session.cookie.expires = false;
   }
   passport.authenticate('local', {session: false}, function(err, user, info){
-    if(err){ return next(err); }
+    if(err){ console.log(err); return next(err); }
     if(user){
       user.token = user.generateJWT();
       req.login(user, function(error) {

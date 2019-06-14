@@ -45,7 +45,6 @@ router.post('/login', function(req, res, next){
   passport.authenticate('local', {session: false}, function(err, user, info){
     if(err){ console.log(err); return next(err); }
     if(user){
-      user.token = user.generateJWT();
       req.login(user, function(error) {
         if (error) return next(error);
         return res.redirect('/home/');

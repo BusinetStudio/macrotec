@@ -10,30 +10,35 @@ block content
                 #mainContent
                     .container-fluid
                         h4.c-grey-900.mT-10.mB-30 Editar Perfil
-                        form(action="/cuenta/perfil/", class="bd bgc-white p-20" method="POST" )
+                        form(action="/cuenta/perfil/", class="bd bgc-white p-20 ubiGeoForm validate" method="POST" )
                             p.font-weight-bold Datos Personales
                             .row
                                 .col-md-6
                                     .form-group 
                                         p Nombre Completo
-                                        input.form-control(type="text", value=usuario.dni, name="nombreCompleto")
+                                            span.c-red-500  *
+                                        input.form-control(type="text", value=usuario.nombreCompleto, name="nombreCompleto")
                                 .col-md-6
                                     .form-group
                                         p DNI
+                                            span.c-red-500  *
                                         input.form-control(type="text", value=usuario.dni, name="dni")
                             .row
                                 .col-md-6
                                     .form-group
                                         p Email
+                                            span.c-red-500  *
                                         input.form-control(type="email", value=usuario.email, name="email")
                                 .col-md-6
                                     .form-group
                                         p Fecha de Nacimiento
+                                            span.c-red-500  *
                                         input.form-control(type="date", value=usuario.fechaNacimiento, name="fechaNacimiento")
                             .row
                                 .col-md-6
                                     .form-group
                                         p Genero
+                                            span.c-red-500  *
                                         select.form-control(name="genero")
                                             if usuario.genero == 'Masculino'
                                                 option(selected) Masculino
@@ -49,19 +54,56 @@ block content
                                 .col-md-6
                                     .form-group
                                         p Dirección
+                                            span.c-red-500  *
                                         input.form-control(type="text", value=usuario.direccion, name="direccion")
                                 .col-md-6
                                     .form-group
+                                        
+                                        p Departamento
+                                            span.c-red-500  *
+                                        select#departamentos.form-control.select2(name="departamento")
+                                          option(disabled selected) Seleccionar departamento
+                                          each departamento in peruGeo.departamentos
+                                            if usuario.departamento == departamento.id_ubigeo
+                                                option(selected value=departamento.id_ubigeo)= departamento.nombre_ubigeo
+                                            else
+                                                option(value=departamento.id_ubigeo)= departamento.nombre_ubigeo
+                            .row
+                                .col-md-6
+                                    .form-group
+                                        p Provincia
+                                          span.c-red-500  *
+                                        select#provincias.form-control.select2(name="provincia")
+                                            option(disabled selected) Seleccionar provincia
+                                            each id in peruGeo.provincias
+                                                each provincia in id
+                                                    if usuario.provincia == provincia.id_ubigeo
+                                                        option(selected data-padre=provincia.id_padre_ubigeo, value= provincia.id_ubigeo, class="d-none")= provincia.nombre_ubigeo
+                                                    else
+                                                        option(data-padre=provincia.id_padre_ubigeo, value= provincia.id_ubigeo, class="d-none")= provincia.nombre_ubigeo
+
+                                .col-md-6
+                                    .form-group
                                         p Distrito
-                                        input.form-control(type="text", value=usuario.distrito name="distrito")
+                                          span.c-red-500  * 
+                                        select#distritos.form-control.select2(name="distrito")
+                                            option(disabled selected) Seleccionar distrito
+                                            each id in peruGeo.distritos
+                                                each distrito in id
+                                                    if usuario.distrito == distrito.id_ubigeo
+                                                        option(selected value=distrito.id_ubigeo, data-padre=distrito.id_padre_ubigeo, class="d-none")= distrito.nombre_ubigeo
+                                                    else
+                                                        option(value=distrito.id_ubigeo, data-padre=distrito.id_padre_ubigeo, class="d-none")= distrito.nombre_ubigeo
                             .row
                                 .col-md-6
                                     .form-group
                                         p teléfono
+                                            span.c-red-500  *
                                         input.form-control(type="text", value=usuario.telefono, name="telefono")
                                 .col-md-6
                                     .form-group
                                         p celular
+                                            span.c-red-500  *
                                         input.form-control(type="text", value=usuario.celular,  name="celular")
                             hr
                             p.font-weight-bold Datos Academicos y de trabajo
@@ -134,19 +176,31 @@ block content
                                 .col-md-6
                                     .form-group
                                         p ¿Cómo se entero del curso?
-                                        input.form-control(type="text", vaue=usuario.comoSeEntero name="comoSeEntero")
+                                            span.c-red-500  *
+                                        input.form-control(type="text", value=usuario.comoSeEntero name="comoSeEntero")
                                 .col-md-6
                                     .form-group
                                         p ¿Por qué eligió Macrotec para especializarse?
+                                            span.c-red-500  *
                                         input.form-control(type="text", value=usuario.porQueMacrotec, name="porQueMacrotec")
                             .row
                                 .col-md-6
                                     .form-group
                                         p ¿Qué otro curso Autodesk desearía aprender?
-                                        input.form-control(type="text", vaue=usuario.cursoInteres name="cursoInteres")
+                                            span.c-red-500  *
+                                        select.select2multiple.form-control(name="cursoInteres" multiple="multiple" )
+                                            option(disabled) Seleccionar o escribir curso
+                                            each custom in usuario.cursoInteres
+                                                option(selected value=custom)= custom
+                                            each curso in productos
+                                                if usuario.cursoInteres.find((e) => {return e == curso.nombre})
+                                                    
+                                                else
+                                                    option(value=curso.nombre)= curso.nombre
                                 .col-md-6
                                     .form-group
                                         p ¿Desería ingresar a nuesta Bolsa de Trabajo?
+                                            span.c-red-500  *
                                         select.form-control(name="bolsaTrabajo")
                                             if usuario.bolsaTrabajo == 'Si' 
                                                 option(selected) Si
@@ -164,5 +218,7 @@ block content
                                 .col-md-12
                                     a.btn.btn-secondary(href="/home" class="mr-2") Cancelar  
                                     input.btn.btn-primary(type='submit' value="Guardar")   
+                                    .form-group
+                                        label#errorResponse.text-normal.c-red-500
                     
     include ../footer 

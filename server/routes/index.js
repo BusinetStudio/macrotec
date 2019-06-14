@@ -32,10 +32,10 @@ router.get('/home',loggedIn, function(req, res, next) {
 });
 router.post('/login', function(req, res, next){
   if(!req.body.username){
-    return res.status(422).json({errors: {email: "can't be blank"}});
+    return res.status(422).json({error: "Debe rellenar todos los campos"});
   }
   if(!req.body.password){
-    return res.status(422).json({errors: {password: "can't be blank"}});
+    return res.status(422).json({error: "Debe rellenar todos los campos"});
   }
   if (req.body.remember) {
     req.session.cookie.maxAge = 1000 * 60 * 3;

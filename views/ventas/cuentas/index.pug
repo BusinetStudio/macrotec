@@ -1,0 +1,51 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Cuentas
+                          .text-center.text-md-left.mb-3
+                            a(href="/ventas/cuentas/nuevo" class="btn btn-primary") Crear nueva cuenta
+
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Nombre de la empresa
+                                                    th RUC
+                                                    th Email
+                                                    th Teléfono
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Nombre de la empresa
+                                                    th RUC
+                                                    th Email
+                                                    th Teléfono
+                                                    th
+                                            tbody
+                                                if cuentas
+                                                    each cuenta in cuentas
+                                                        tr
+                                                            td= cuenta.nombre
+                                                            td= cuenta.ruc
+                                                            td= cuenta.email
+                                                            td= cuenta.telefono
+                                                            td.text-right
+                                                                - var editarLink = "/ventas/cuentas/editar/"+cuenta._id;
+                                                                a.editar(href=editarLink)
+                                                                    i.c-orange-500.ti-pencil.mr-2                                                                    
+                                                                - var eliminarLink = "/ventas/cuentas/borrar/"+cuenta._id
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                    
+    include ../../footer 

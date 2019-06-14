@@ -1,0 +1,60 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Nueva Cuenta
+                        .row.justify-content-center
+                            .col-md-6
+                                form(class="ubiGeoForm", action="/ventas/cuentas/nuevo", method="POST" )
+                             
+
+                                    .form-group  
+                                        p Nombre
+                                        input.form-control(type="text" placeholder="Nombre de la empresa" name="nombre")
+                                    .form-group  
+                                        p RUC
+                                        input.form-control(type="text" placeholder="RUC" name="ruc")
+                                    .form-group
+                                        p Teléfono
+                                        input.form-control(type="text" placeholder="Teléfono" name="telefono")
+                                    .form-group
+                                        p Correo
+                                        input.form-control(type="text" placeholder="Correo" name="email")
+                                    .form-group
+                                        p Dirección
+                                        input.form-control(type="text" placeholder="Dirección" name="direccion")
+                                    
+                                    .form-group
+                                        p Departamento
+                                        select#departamentos.form-control.select2(name="departamento")
+                                          option(disabled selected) Seleccionar departamento
+                                          each departamento in peruGeo.departamentos
+                                            option(value=departamento.id_ubigeo)= departamento.nombre_ubigeo
+                                    .form-group
+                                        p Provincia
+                                          select#provincias.form-control.select2(name="provincia")
+                                            option(disabled selected) Seleccionar provincia
+                                            each id in peruGeo.provincias
+                                              each provincia in id
+                                                option(data-padre=provincia.id_padre_ubigeo, value= provincia.id_ubigeo, class="d-none")= provincia.nombre_ubigeo
+                                    .form-group
+                                        p Distrito
+                                          select#distritos.form-control.select2(name="distrito")
+                                            option(disabled selected) Seleccionar distrito
+                                            each id in peruGeo.distritos
+                                              each distrito in id
+                                                option(value=distrito.id_ubigeo, data-padre=distrito.id_padre_ubigeo, class="d-none")= distrito.nombre_ubigeo
+                                    a.btn.btn-secondary(href="/ventas/cuentas/" class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit' value="Guardar")   
+
+        
+    include ../../footer 
+
+      

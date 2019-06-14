@@ -109,6 +109,7 @@ router.get('/cursos/editar/:id', function(req, res, next) {
               res.render('administracion/cursos-editar',{
                 title: 'Editar Curso',
                 datos: result,
+                usuario: req.user,
                 profesores: result2,
                 productos: result3
               });

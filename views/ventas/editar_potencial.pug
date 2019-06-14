@@ -38,6 +38,15 @@ block content
                                                     option(selected, value=curso._id)= curso.codigo +' - '+curso.softwareName
                                                 else    
                                                     option( value=curso._id)= curso.codigo +' - '+curso.softwareName
+                                    .form-group 
+                                        p Asignar Cuenta
+                                        select.form-control.select2(name="cuenta")
+                                            option(value="") Sin cuenta
+                                            each cuenta in cuentas  
+                                                if potencial.cuenta == cuenta.ruc
+                                                    option(selected value=cuenta.ruc)= cuenta.nombre
+                                                else
+                                                    option(value=cuenta.ruc)= cuenta.nombre
                                     input(type="hidden", value=usuario._id, name="vendedorAsignado")
                                     input(type="hidden", value=usuario.nombreCompleto, name="vendedorAsignadoNombre")
                                     input(type="hidden", value=potencial._id, name="_id")

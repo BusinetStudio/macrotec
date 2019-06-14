@@ -11,6 +11,7 @@ var PotencialesSchema = new mongoose.Schema({
   cursoInteresCodigo: {type: String, required: [true, "can't be blank"] },
   vendedorAsignado: {type: String, required: [true, "can't be blank"] },
   vendedorAsignadoNombre: {type: String, required: [true, "can't be blank"] },
+  cuenta: String
 }, {timestamps: true});
 
 PotencialesSchema.plugin(uniqueValidator, {message: 'is already taken.'});

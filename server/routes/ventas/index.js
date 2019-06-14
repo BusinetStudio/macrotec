@@ -11,8 +11,13 @@ var Potenciales = mongoose.model('Potenciales');
 var Reservas = mongoose.model('Reservas');
 var Pagos = mongoose.model('Pagos');
 var Actividades = mongoose.model('Actividades');
+var Cuentas = mongoose.model('Cuentas');
 
-
+var peruGeo = {
+  provincias: require('../../datos/peruGeo/provincias.json'),
+  departamentos: require('../../datos/peruGeo/departamentos.json'),
+  distritos: require('../../datos/peruGeo/distritos.json')
+}
   
 router.get('/clientes-potenciales', async function(req, res, next){
   var vendedores = await Usuarios.find({ tipoUsuario: {$in: ['Admin', 'Vendedor']} });
@@ -35,11 +40,13 @@ router.get('/clientes-potenciales', async function(req, res, next){
 router.get('/clientes-potenciales/nuevo', async function(req, res, next){
   var productos = await Productos.find();
   var cursos = await Cursos.find();
+  var cuentas = await Cuentas.find();
   var data = {
     title: 'Agregar Cliente Potencial',
     usuario: req.user,
     productos: productos,
     cursos: cursos,
+    cuentas: cuentas,
   }
   res.render('ventas/nuevo_potencial',data)
 });
@@ -56,6 +63,7 @@ router.post('/clientes-potenciales/nuevo', async function(req, res, next){
   potencial.cursoInteresCodigo = cursoInteres.codigo;
   potencial.vendedorAsignado = req.body.vendedorAsignado;
   potencial.vendedorAsignadoNombre = req.body.vendedorAsignadoNombre;
+  potencial.cuenta = req.body.cuenta
   potencial.save().then(function(){
     return res.redirect('/ventas/clientes-potenciales');
   }).catch(next);
@@ -66,13 +74,15 @@ router.get('/clientes-potenciales/editar/:id', async function(req, res, next){
   var productos = await Productos.find();
   var cursos = await Cursos.find();
   var potencial = await Potenciales.findById(req.params.id);
+  var cuentas = await Cuentas.find();
   var data = {
     title: 'Editar Cliente Potencial',
     usuario: req.user,
     vendedores: vendedores,
     productos: productos,
     potencial: potencial,
-    cursos: cursos
+    cursos: cursos,
+    cuentas: cuentas,
   }
   
   res.render('ventas/editar_potencial',data)
@@ -322,5 +332,64 @@ router.get('/actividades/:id', async function(req, res, next){
     potencial: potencial
   }
   res.render('ventas/actividades',data)
+});
+
+
+
+router.get('/cuentas/', async function(req, res, next){
+  var cuentas = await Cuentas.find();
+  var data = {
+    title: 'Cuentas',
+    usuario: req.user,
+    cuentas: cuentas
+  }
+  res.render('ventas/cuentas',data)
+});
+router.get('/cuentas/nuevo', async function(req, res, next){
+  var data = {
+    title: 'Cuentas',
+    usuario: req.user,
+    peruGeo: peruGeo
+  }
+  res.render('ventas/cuentas/nuevo',data)
+});
+router.get('/cuentas/borrar/:id', async function(req, res, next){
+  Cuentas.findByIdAndRemove(req.params.id, function(err, result) {
+    if(err) return res.status(500).send(err);
+    if(result) res.redirect('/ventas/cuentas/');
+  });
+});
+router.get('/cuentas/editar/:id', async function(req, res, next){
+  var cuenta = await Cuentas.findById(req.params.id);
+  var data = {
+    title: 'Cuentas',
+    usuario: req.user,
+    cuenta: cuenta,
+    peruGeo: peruGeo
+  }
+  res.render('ventas/cuentas/editar',data)
+});
+
+router.post('/cuentas/nuevo/', async function(req, res, next){
+  var cuentas = new Cuentas();
+  for(key in req.body){
+    cuentas[key] = req.body[key];
+  }
+  cuentas.save().then(function(){
+    return res.redirect('/ventas/cuentas/');
+  }).catch(next);
+});
+router.post('/cuentas/editar/:id', async function(req, res, next){
+  var query = { '_id':req.params.id };
+  var data= new Object;
+  for(key in req.body){
+    data[key] = req.body[key];
+  }
+  Cuentas.findByIdAndUpdate( query,data,{new: true},
+    (err, todo) => {
+      if (err) return res.status(500).send(err);
+      res.redirect('/ventas/cuentas/');
+    }
+  )
 });
 module.exports = router;

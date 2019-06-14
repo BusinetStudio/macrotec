@@ -34,10 +34,17 @@ block content
                                         select.form-control.select2(name="cursoId")
                                             each curso in cursos
                                                 option(value=curso._id)= curso.codigo +' - '+curso.softwareName
-
+                                    .form-group 
+                                        p Asignar Cuenta
+                                        select.form-control.select2(name="cuenta")
+                                            option(selected disabled) Seleccionar cuenta
+                                            option(value="") Sin cuenta
+                                            each cuenta in cuentas  
+                                                option(value=cuenta.ruc)= cuenta.nombre
+                                                
                                     input(type="hidden", value=usuario._id, name="vendedorAsignado")
                                     input(type="hidden", value=usuario.nombreCompleto, name="vendedorAsignadoNombre")
-                                    a.btn.btn-secondary(href="/ventas/reserva/todos" class="mr-2") Cancelar
+                                    a.btn.btn-secondary(href="/ventas/clientes-potenciales" class="mr-2") Cancelar
                                     input.btn.btn-primary(type='submit' value="Guardar")   
                     
     include ../footer 

@@ -5,26 +5,28 @@ var jwt = require('jsonwebtoken');
 var secret = require('../config').secret;
 
 var UserSchema = new mongoose.Schema({
-  username: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},
-  email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
-  nombreCompleto: {type: String, required: [true, "can't be blank"]},
-  dni: String,
+  username: {type: String, lowercase: true, unique: true, required: [true, "Debe rellenar todos los campos obligatorios"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},
+  email: {type: String, lowercase: true, unique: true, required: [true, "Debe rellenar todos los campos obligatorios"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
+  nombreCompleto: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  dni: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
   tipoUsuario: {
     type: String, 
     enum: ["Admin", "Vendedor", "Profesor", "Alumno"],
-    required: [true, "can't be blank"]
+    required: [true, "Debe rellenar todos los campos obligatorios"]
   },
   image: {type: String, default: '/assets/images/avatars/smiley-cyrus.jpg'},
   hash: String,
   salt: String,
 
   //Personal
-  fechaNacimiento: String,
-  genero: {type: String, enum:['Masculino', 'Femenino']},
-  dirección: String,
-  distrito: String,
-  telefono: String, 
-  celular: String,
+  fechaNacimiento: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  genero: {type: String, enum:['Masculino', 'Femenino'], required: [true, "Debe rellenar todos los campos obligatorios"]},
+  direccion: {type: String,required: [true, "Debe rellenar todos los campos obligatorios"]},
+  departamento: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  provincia: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  distrito: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  telefono: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]}, 
+  celular: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
 
   //alumno
   instituto: String,
@@ -38,9 +40,9 @@ var UserSchema = new mongoose.Schema({
   telefonoEmpresa:String,
   
   //marketing
-  comoSeEntero:String,
-  porQueMacrotec:String,
-  cursoInteres: String,
+  comoSeEntero: String,
+  porQueMacrotec: String,
+  cursoInteres: [],
   bolsaTrabajo: String,
   ingles:String
 }, {timestamps: true});

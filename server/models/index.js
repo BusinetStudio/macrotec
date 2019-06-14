@@ -5,3 +5,4 @@ require('../models/potenciales');
 require('../models/actividades');
 require('../models/reservas');
 require('../models/pagos');
+require('../models/cuentas');

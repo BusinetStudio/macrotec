@@ -72,8 +72,8 @@ export default (function () {
               form.find('#errorResponse').text(response.error)
               
             },
-            success: function(){
-              window.location.replace('/home')
+            success: function(data){
+              window.location.replace(data.redirect)
             }
           })
         });

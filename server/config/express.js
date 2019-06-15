@@ -10,7 +10,6 @@ const passport = require('passport');
 const errorhandler 				= require('errorhandler');
 const mongoose 				= require('mongoose');
 const morgan 					= require('morgan');
-const SessionStore = require('session-mongoose')(express)
 
 var port     = process.env.PORT || 3000;
 var isProduction = process.env.NODE_ENV === 'production';
@@ -42,12 +41,8 @@ require('../models');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.session(
+app.use(session(
   {
-  store: new SessionStore({
-    url: 'mongodb://ivan:rogue195@ds237267.mlab.com:37267/heroku_nt68cjwd',
-    interval: 1200000
-  }),  
   secret: 'secret',
   saveUninitialized: true,
   resave: true

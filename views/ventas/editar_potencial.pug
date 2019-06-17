@@ -31,7 +31,7 @@ block content
                                     
                                     .form-group.mt-4 
                                         p Curso
-                                        select.form-control.select2(name="cursoId")
+                                        select.form-control.select2(name="cursoId"  multiple="multiple")
                                             opntion(selected, disabled) Selecciona un curso
                                             each curso in cursos
                                                 if curso.codigo == potencial.cursoInteresCodigo
@@ -40,7 +40,7 @@ block content
                                                     option( value=curso._id)= curso.codigo +' - '+curso.softwareName
                                     .form-group 
                                         p Asignar Cuenta
-                                        select.form-control.select2(name="cuenta")
+                                        select.form-control.select2(name="cuenta" )
                                             option(value="") Sin cuenta
                                             each cuenta in cuentas  
                                                 if potencial.cuenta == cuenta.ruc

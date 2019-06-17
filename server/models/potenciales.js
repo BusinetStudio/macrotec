@@ -7,8 +7,8 @@ var PotencialesSchema = new mongoose.Schema({
   telefono: { type: String, required: [true, "can't be blank"] },
   celular: { type: String, required: [true, "can't be blank"] },
   email: {type: String, required: [true, "can't be blank"] },
-  cursoInteres: {type: String, required: [true, "can't be blank"] },
-  cursoInteresCodigo: {type: String, required: [true, "can't be blank"] },
+  cursoInteres: [],
+  cursoInteresCodigo:[],
   vendedorAsignado: {type: String, required: [true, "can't be blank"] },
   vendedorAsignadoNombre: {type: String, required: [true, "can't be blank"] },
   cuenta: String

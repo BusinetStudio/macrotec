@@ -19,14 +19,14 @@ var UserSchema = new mongoose.Schema({
   salt: String,
 
   //Personal
-  fechaNacimiento: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
-  genero: {type: String, enum:['Masculino', 'Femenino'], required: [true, "Debe rellenar todos los campos obligatorios"]},
-  direccion: {type: String,required: [true, "Debe rellenar todos los campos obligatorios"]},
-  departamento: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
-  provincia: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
-  distrito: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
-  telefono: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]}, 
-  celular: {type: String, required: [true, "Debe rellenar todos los campos obligatorios"]},
+  fechaNacimiento: String,
+  genero: {type: String, enum:['Masculino', 'Femenino']},
+  direccion: String,
+  departamento: String,
+  provincia: String,
+  distrito: String,
+  telefono: String,
+  celular: String,
 
   //alumno
   instituto: String,
@@ -47,7 +47,7 @@ var UserSchema = new mongoose.Schema({
   ingles:String
 }, {timestamps: true});
 
-UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
+UserSchema.plugin(uniqueValidator, {error: 'is already taken.'});
 
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
@@ -83,6 +83,9 @@ UserSchema.methods.toAuthJSON = function(){
 UserSchema.methods.toProfileJSONFor = function(user){
   return {
     username: this.username,
+    _id: this._id,
+    nombreCompleto: this.nombreCompleto,
+    tipoUsuario: this.tipoUsuario,
     image: this.image || 'https://static.productionready.io/images/smiley-cyrus.jpg',
   };
 };

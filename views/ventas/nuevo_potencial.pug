@@ -31,7 +31,7 @@ block content
                                             input.form-control(type="email" placeholder="Correo Electrónico" name="email")
                                     .form-group 
                                         p Curso
-                                        select.form-control.select2(name="cursoId")
+                                        select.form-control.select2(name="cursoId" multiple="multiple")
                                             each curso in cursos
                                                 option(value=curso._id)= curso.codigo +' - '+curso.softwareName
                                     .form-group 

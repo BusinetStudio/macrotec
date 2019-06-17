@@ -97,6 +97,26 @@ export default (function () {
             }
           })
         });
+
+
+        $('#dniAutocomplete input[name="dni"]').on('change', function(){
+          $.ajax({
+            method: "POST",
+            url: '/ventas/clientes-potenciales/getByDni',
+            data: {dni: $(this).val()},
+            error: function(data){
+              console.log(data)
+            },
+            success: function(data){
+              if(data.length > 0){
+                $.each(data[0], function(i, e){
+                  $('input[name="'+i+'"]').val(e);
+                })
+              }
+              
+            }
+          })
+        })
                               
       
 }())

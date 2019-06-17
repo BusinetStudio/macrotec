@@ -12,7 +12,7 @@ block content
                         h4.c-grey-900.mT-10.mB-30 Nuevo Usuario
                         .row.justify-content-center
                             .col-md-6
-                                form(action="/usuarios/registro/", method="POST" )
+                                form#dniAutocomplete(action="/usuarios/registro/", method="POST" )
                                     .form-group 
                                         p Nombre Completo
                                         input.form-control(type="text", name="nombreCompleto")

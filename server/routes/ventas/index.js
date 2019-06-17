@@ -11,6 +11,7 @@ var Potenciales = mongoose.model('Potenciales');
 var Reservas = mongoose.model('Reservas');
 var Pagos = mongoose.model('Pagos');
 var Actividades = mongoose.model('Actividades');
+var Tareas = mongoose.model('Tareas');
 var Cuentas = mongoose.model('Cuentas');
 
 var peruGeo = {
@@ -58,9 +59,15 @@ router.post('/clientes-potenciales/nuevo', async function(req, res, next){
   potencial.telefono = req.body.telefono;
   potencial.celular = req.body.celular;
   potencial.email = req.body.email;
-  cursoInteres = await Cursos.findById(req.body.cursoId);
-  potencial.cursoInteres = cursoInteres.softwareName;
-  potencial.cursoInteresCodigo = cursoInteres.codigo;
+  if(req.body.cursoId){
+    potencial['cursoInteres'] = [];
+    potencial['cursoInteresCodigo'] = [];
+    for(k in req.body.cursoId){
+      var busqueda = await Cursos.findById(req.body.cursoId[k]);
+      potencial['cursoInteres'].push(busqueda.softwareName);
+      potencial['cursoInteresCodigo'].push(busqueda.codigo);        
+    }
+  }  
   potencial.vendedorAsignado = req.body.vendedorAsignado;
   potencial.vendedorAsignadoNombre = req.body.vendedorAsignadoNombre;
   potencial.cuenta = req.body.cuenta
@@ -68,7 +75,10 @@ router.post('/clientes-potenciales/nuevo', async function(req, res, next){
     return res.redirect('/ventas/clientes-potenciales');
   }).catch(next);
 });
-
+router.post('/clientes-potenciales/getByDni', async function(req, res, next){
+  var potencial = await Potenciales.find({dni: {$in: req.body.dni}});
+  res.json(potencial)
+});
 router.get('/clientes-potenciales/editar/:id', async function(req, res, next){
   var vendedores = await Usuarios.find({ privilege: 'Vendedor', privilege: 'Admin'});
   var productos = await Productos.find();
@@ -91,12 +101,18 @@ router.post('/clientes-potenciales/editar', async function(req, res, next){
   var query = { '_id':req.body._id };
   var data= new Object;
   for(key in req.body){
-    if(key.cursoId){
-      var curso = await Cursos.findById(req.body.cursoId);
-      data['cursoInteres'] = curso.softwareName;
-      data['cursoInteresCodigo'] = curso.codigo;
+    if(req.body.cursoId){
+      data['cursoInteres'] = [];
+      data['cursoInteresCodigo'] = [];
+      for(k in req.body.cursoId){
+        var busqueda = await Cursos.findById(req.body.cursoId[k]);
+        data['cursoInteres'].push(busqueda.softwareName);
+        data['cursoInteresCodigo'].push(busqueda.codigo);        
+      }
+      
+    }else{
+      data[key] = req.body[key];
     }
-    data[key] = req.body[key];
   }
   Potenciales.findByIdAndUpdate( query,data,{new: true},
     (err, todo) => {
@@ -322,17 +338,6 @@ router.get('/pagos/borrar/:reserva/:id', async function(req, res, next){
 });
 
 
-router.get('/actividades/:id', async function(req, res, next){
-  var actividades = await Actividades.find({potencial: req.params.id});
-  var potencial = await Potenciales.findById(req.params.id);
-  var data = {
-    title: 'Actividades',
-    usuario: req.user,
-    actividades: actividades,
-    potencial: potencial
-  }
-  res.render('ventas/actividades',data)
-});
 
 
 
@@ -391,5 +396,48 @@ router.post('/cuentas/editar/:id', async function(req, res, next){
       res.redirect('/ventas/cuentas/');
     }
   )
+});
+
+
+
+
+router.get('/actividades/:id', async function(req, res, next){
+  var actividades = await Actividades.find({potencial: req.params.id});
+  var tareas = await Tareas.find({potencial: req.params.id, usuario: req.user._id});
+  var potencial = await Potenciales.findById(req.params.id);
+  var data = {
+    title: 'Actividades',
+    usuario: req.user,
+    actividades: actividades,
+    potencial: potencial,
+    tareas: tareas
+  }
+  res.render('ventas/actividades',data)
+});
+
+router.post('/actividades/nuevo/', async function(req, res, next){
+  var data = new Actividades();
+  for(key in req.body){
+    data[key] = req.body[key];
+  }
+  var today = new Date();
+  var dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  var today = dd + '/' + mm + '/' + yyyy;
+  data.fecha = today;
+  var time = new Date();
+  var horaActual = time.getHours() + ":" + time.getMinutes();
+  data.hora = horaActual;
+  data.save().then(function(){
+    return res.redirect('/ventas/actividades/'+req.body.potencial);
+  }).catch(next);
+});
+
+router.get('/actividades/:potencial/borrar/:id', async function(req, res, next){
+  Actividades.findByIdAndRemove(req.params.id, function(err, result) {
+    if(err) return res.status(500).send(err);
+    if(result) res.redirect('/ventas/actividades/'+req.params.potencial);
+  });
 });
 module.exports = router;

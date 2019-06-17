@@ -6,3 +6,4 @@ require('../models/actividades');
 require('../models/reservas');
 require('../models/pagos');
 require('../models/cuentas');
+require('../models/tareas');

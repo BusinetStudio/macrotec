@@ -117,6 +117,34 @@ export default (function () {
             }
           })
         })
+
+
+        //tareas
+        function tareas(){
+          $('#tareasWrap .checkbox input.peer').click(function(){
+            if($(this).is(':checked')){
+              $(this).closest('.list-group-item').find('label.peers span.peer-greed').wrapInner('<del></del>');
+              $('#tareasCompletadas').prepend($(this).closest('.list-group-item'));
+            }else{
+              $('#tareas').prepend($(this).closest('.list-group-item'));
+              $(this).closest('.list-group-item').find('del').contents().unwrap();
+            }
+          })
+        }
+        tareas();
+        $('#tareasWrap').on('change', function(){
+          tareas();
+        })
+        
+        $('#mostrarTareas').click(function(){
+          $(this).addClass('d-none');$('#ocultarTareas').removeClass('d-none');
+          $('#tareasCompletadas').toggleClass('d-none')
+          tareas();
+        })
+        $('#ocultarTareas').click(function(){
+          $(this).addClass('d-none');$('#mostrarTareas').removeClass('d-none');
+          $('#tareasCompletadas').toggleClass('d-none')
+        })
                               
       
 }())

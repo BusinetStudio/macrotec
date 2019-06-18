@@ -403,7 +403,7 @@ router.post('/cuentas/editar/:id', async function(req, res, next){
 
 router.get('/actividades/:id', async function(req, res, next){
   var actividades = await Actividades.find({potencial: req.params.id});
-  var tareas = await Tareas.find({potencial: req.params.id, usuario: req.user._id});
+  var tareas = await Tareas.find({potencial: req.params.id, usuario_id: req.user._id});
   var potencial = await Potenciales.findById(req.params.id);
   var data = {
     title: 'Actividades',
@@ -440,4 +440,32 @@ router.get('/actividades/:potencial/borrar/:id', async function(req, res, next){
     if(result) res.redirect('/ventas/actividades/'+req.params.potencial);
   });
 });
+
+
+router.post('/tareas/nuevo/', async function(req, res, next){
+  var data = new Tareas();
+  for(key in req.body){
+    data[key] = req.body[key];
+  }
+  var today = new Date();
+  var dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  var today = dd + '/' + mm + '/' + yyyy;
+  data.fecha = today;
+  var time = new Date();
+  var horaActual = time.getHours() + ":" + time.getMinutes();
+  data.hora = horaActual;
+  data.save().then(function(){
+    return res.redirect('/ventas/actividades/'+req.body.potencial);
+  }).catch(next);
+});
+router.get('/tareas/:potencial/borrar/:id', async function(req, res, next){
+  Tareas.findByIdAndRemove(req.params.id, function(err, result) {
+    if(err) return res.status(500).send(err);
+    if(result) res.redirect('/ventas/actividades/'+req.params.potencial);
+  });
+});
+
+
 module.exports = router;

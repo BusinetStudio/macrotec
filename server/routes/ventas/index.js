@@ -62,10 +62,16 @@ router.post('/clientes-potenciales/nuevo', async function(req, res, next){
   if(req.body.cursoId){
     potencial['cursoInteres'] = [];
     potencial['cursoInteresCodigo'] = [];
-    for(k in req.body.cursoId){
-      var busqueda = await Cursos.findById(req.body.cursoId[k]);
+    if(Array.isArray(req.body.cursoId)){
+      for(k in req.body.cursoId){
+        var busqueda = await Cursos.findById(req.body.cursoId[k]);
+        potencial['cursoInteres'].push(busqueda.softwareName);
+        potencial['cursoInteresCodigo'].push(busqueda.codigo);        
+      }
+    }else{
+      var busqueda = await Cursos.findById(req.body.cursoId);
       potencial['cursoInteres'].push(busqueda.softwareName);
-      potencial['cursoInteresCodigo'].push(busqueda.codigo);        
+      potencial['cursoInteresCodigo'].push(busqueda.codigo); 
     }
   }  
   potencial.vendedorAsignado = req.body.vendedorAsignado;

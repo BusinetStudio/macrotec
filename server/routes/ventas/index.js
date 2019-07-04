@@ -192,9 +192,28 @@ router.post('/reserva/nuevo/:codigo', async function(req, res, next){
   reserva.cursoNombre = cursoDatos.softwareName;
   reserva.comentarios = req.body.comentarios;
 
-  reserva.save().then(function(){
-    return res.redirect('/ventas/reservas/'+req.params.codigo);
+  var data = new Actividades();
+  data.potencial = req.body.potencial;
+  data.actividad = 'Reservo curso: '+cursoDatos.codigo+' - '+cursoDatos.softwareName;
+  data.usuario_id = req.user._id;
+  data.usuario_nombre = req.user.nombreCompleto;
+  var today = new Date();
+  var dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  var today = dd + '/' + mm + '/' + yyyy;
+  data.fecha = today;
+  var time = new Date();
+  var horaActual = time.getHours() + ":" + time.getMinutes();
+  data.hora = horaActual;
+
+  
+  data.save().then(function(){    
+    reserva.save().then(function(){
+      return res.redirect('/ventas/reservas/'+req.params.codigo);
+    }).catch(next);
   }).catch(next);
+  
 });
 
 router.get('/reserva/editar/:id', async function(req, res, next){

@@ -40,7 +40,7 @@ block content
                                   .layers
                                     .layer.w-100.mB-10
                                     .layer.w-100
-                                      ul.list-task.list-group(data-role='tasklist')
+                                      ul.list-task.list-group(data-role='tasklist', style="max-height: 300px; overflow: auto;")
                                         each actividad in actividades
                                           li.list-group-item.bdw-0(data-role='task')
                                               label.peers.peer-greed.js-sb.ai-c(for='inputCall2')
@@ -65,7 +65,7 @@ block content
                                   .layers#tareasWrap
                                     .layer.w-100.mB-10
                                     .layer.w-100
-                                      ul#tareas.list-task.list-group(data-role='tasklist')
+                                      ul#tareas.list-task.list-group(data-role='tasklist', style="max-height: 300px; overflow: auto;")
                                         each tarea in tareas
                                           li.list-group-item.bdw-0( data-role='task')
                                             .checkbox.checkbox-circle.checkbox-info.peers.ai-c
@@ -80,7 +80,7 @@ block content
                                       p.text-center
                                         a#mostrarTareas(href="#!").mb-4 Mostrar tareas completadas
                                         a#ocultarTareas(href="#!").mb-4.d-none Ocultar tareas completadas
-                                        ul#tareasCompletadas.list-task.list-group.d-none(data-role='tasklist')
+                                        ul#tareasCompletadas.list-task.list-group.d-none(data-role='tasklist', style="max-height: 300px; overflow: auto;")
 
 
                                       form(action="/ventas/tareas/nuevo" method="post")

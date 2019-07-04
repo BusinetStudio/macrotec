@@ -44,7 +44,7 @@ router.post('/editar/', function(req, res, next) {
     )
   })
 });
-router.get('/cursos/eliminar/:id', function(req, res, next) {
+router.get('/eliminar/:id', function(req, res, next) {
   User.findByIdAndRemove(req.params.id, function(err, result) {
     if(err) return res.status(500).send(err);
     if(result) res.redirect('/usuarios/todos/');

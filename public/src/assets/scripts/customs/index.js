@@ -120,14 +120,33 @@ export default (function () {
 
 
         //tareas
-        function tareas(){
+        function tareas(){ 
           $('#tareasWrap .checkbox input.peer').click(function(){
             if($(this).is(':checked')){
+              $.ajax({
+                type: "POST",
+                url: '/ventas/tareas/estado',
+                data: {
+                  id: $(this).attr('id'),
+                  estado: 'Completado'
+                },
+                dataType: 'json'
+              });
               $(this).closest('.list-group-item').find('label.peers span.peer-greed').wrapInner('<del></del>');
               $('#tareasCompletadas').prepend($(this).closest('.list-group-item'));
             }else{
               $('#tareas').prepend($(this).closest('.list-group-item'));
               $(this).closest('.list-group-item').find('del').contents().unwrap();
+              $.ajax({
+                type: "POST",
+                url: '/ventas/tareas/estado',
+                data: {
+                  id: $(this).attr('id'),
+                  estado: 'Pendiente'
+                },
+                dataType: 'json'
+              });
+              
             }
           })
         }
@@ -144,6 +163,7 @@ export default (function () {
         $('#ocultarTareas').click(function(){
           $(this).addClass('d-none');$('#mostrarTareas').removeClass('d-none');
           $('#tareasCompletadas').toggleClass('d-none')
+          tareas();
         })
                               
       

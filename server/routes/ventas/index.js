@@ -481,10 +481,25 @@ router.post('/tareas/nuevo/', async function(req, res, next){
   var time = new Date();
   var horaActual = time.getHours() + ":" + time.getMinutes();
   data.hora = horaActual;
-  data.save().then(function(){
+  data.estado = 'Pendiente';
+  data.save().then(function(){ 
     return res.redirect('/ventas/actividades/'+req.body.potencial);
   }).catch(next);
 });
+router.post('/tareas/estado/', async function(req, res, next){
+  var query = { '_id':req.body.id };
+  var data= new Object;
+  data.estado = req.body.estado;
+  Tareas.findByIdAndUpdate( query,data,{new: true},
+    (err, todo) => {
+      if (err) return res.status(500).send(err);
+      res.json({message: 'actualizado'});
+    }
+  )
+});
+
+
+
 router.get('/tareas/:potencial/borrar/:id', async function(req, res, next){
   Tareas.findByIdAndRemove(req.params.id, function(err, result) {
     if(err) return res.status(500).send(err);

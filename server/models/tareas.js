@@ -7,7 +7,7 @@ var TareasSchema = new mongoose.Schema({
   usuario_nombre: { type: String, required: [true, "can't be blank"]},
   tarea: { type: String, required: [true, "can't be blank"]},
   estado: {type: String, enum: ['Pendiente', ' Completado'] },
-  fecha: String,
+  fecha: String, 
   hora: String,
 }, {timestamps: true});
 

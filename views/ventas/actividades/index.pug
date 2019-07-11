@@ -67,21 +67,33 @@ block content
                                     .layer.w-100
                                       ul#tareas.list-task.list-group(data-role='tasklist', style="max-height: 300px; overflow: auto;")
                                         each tarea in tareas
-                                          li.list-group-item.bdw-0( data-role='task')
-                                            .checkbox.checkbox-circle.checkbox-info.peers.ai-c
-                                              input.peer(type='checkbox', name=tarea._id, id=tarea._id)
-                                              label.peers.peer-greed.js-sb.ai-c(for=tarea._id)
-                                                span.peer.peer-greed=tarea.tarea
-                                                  span.badge.badge-pill.ml-3.badge-success.lh-0.p-10=tarea.fecha
-                                                span.peers
-                                                  a.borrar(href='/ventas/tareas/'+potencial._id+'/borrar/'+tarea._id)
-                                                    i.c-red-500.ti-close
+                                          if tarea.estado == 'Pendiente' || tarea.estado == undefined
+                                            li.list-group-item.bdw-0( data-role='task')
+                                              .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                                input.peer(type='checkbox', name=tarea._id, id=tarea._id, data-estado=tarea.estado)
+                                                label.peers.peer-greed.js-sb.ai-c(for=tarea._id)
+                                                  span.peer.peer-greed=tarea.tarea
+                                                    span.badge.badge-pill.ml-3.badge-success.lh-0.p-10=tarea.fecha
+                                                  span.peers 
+                                                    a.borrar(href='/ventas/tareas/'+potencial._id+'/borrar/'+tarea._id)
+                                                      i.c-red-500.ti-close
                                       hr
                                       p.text-center
                                         a#mostrarTareas(href="#!").mb-4 Mostrar tareas completadas
                                         a#ocultarTareas(href="#!").mb-4.d-none Ocultar tareas completadas
                                         ul#tareasCompletadas.list-task.list-group.d-none(data-role='tasklist', style="max-height: 300px; overflow: auto;")
-
+                                          each tarea in tareas
+                                            if tarea.estado == 'Completado'
+                                              li.list-group-item.bdw-0( data-role='task')
+                                                .checkbox.checkbox-circle.checkbox-info.peers.ai-c
+                                                  input.peer(type='checkbox', name=tarea._id, id=tarea._id, data-estado=tarea.estado, checked)
+                                                  label.peers.peer-greed.js-sb.ai-c(for=tarea._id)
+                                                    span.peer.peer-greed
+                                                      del=tarea.tarea
+                                                      span.badge.badge-pill.ml-3.badge-success.lh-0.p-10=tarea.fecha
+                                                    span.peers 
+                                                      a.borrar(href='/ventas/tareas/'+potencial._id+'/borrar/'+tarea._id)
+                                                        i.c-red-500.ti-close
 
                                       form(action="/ventas/tareas/nuevo" method="post")
                                         .form-group

@@ -27,19 +27,21 @@ block content
                                     .tablaEditable
 
                                         table#dataTable.table.table-striped.table-bordered.table-hover(cellspacing='0', width='100%')
-                                            thead
+                                            thead 
                                                 tr
                                                     th Codigo
                                                     th Software
                                                     th Modalidad
-                                                    th Fecha
+                                                    th Sede
+                                                    th Fecha de inicio
                                                     th
                                             tfoot
                                                 tr
                                                     th Codigo
                                                     th Software
                                                     th Modalidad
-                                                    th Fecha
+                                                    th Sede
+                                                    th Fecha de inicio
                                                     th
                                             tbody
                                                 if cursos
@@ -48,6 +50,7 @@ block content
                                                             td= curso.codigo
                                                             td= curso.softwareName
                                                             td= curso.modalidad
+                                                            td= curso.sede
                                                             td
                                                                 - var fechaInicio = new Date(curso.fecha_inicio);
                                                                 = fechaInicio.getDate() + '/' + (fechaInicio.getMonth() + 1) + '/' + fechaInicio.getFullYear()

@@ -137,7 +137,6 @@ router.get('/clientes-potenciales/borrar/:id', function(req, res, next){
 
 
 router.get('/reservas', async function(req, res, next){
-  var reservas = await Reservas.find({ tipoUsuario: {$in: ['Admin', 'Vendedor']} });
   var cursos = await Cursos.find();
   var data = {
     title: 'Reservas',
@@ -161,8 +160,12 @@ router.get('/reservas/:codigo', async function(req, res, next){
   res.render('ventas/reservas/reservas',data)
 });
 router.get('/reserva/nuevo/:codigo', async function(req, res, next){
+  
   var reservas = await Reservas.find({ tipoUsuario: {$in: ['Admin', 'Vendedor']}, cursoCodigo: {$in: req.params.codigo} });
   var curso = await Cursos.find({codigo: {$in: req.params.codigo}});
+  if(curso.cupos >= curso.reservas){
+    return res.redirect('/ventas/reservas/'+req.params.codigo);
+  }
   var potenciales = await Potenciales.find();
   var data = {
     title: 'Reservas',
@@ -175,6 +178,7 @@ router.get('/reserva/nuevo/:codigo', async function(req, res, next){
 });
 
 router.post('/reserva/nuevo/:codigo', async function(req, res, next){
+  cursoDatos = await Cursos.findById(req.body.curso);
   var reserva = new Reservas();
   reserva.vendedor = req.body.vendedor;
   reserva.vendedorNombre = req.body.vendedorNombre;
@@ -187,11 +191,9 @@ router.post('/reserva/nuevo/:codigo', async function(req, res, next){
   reserva.email = potencialDatos.email;
   reserva.fechaReserva = req.body.fechaReserva;
   reserva.curso = req.body.curso;
-  cursoDatos = await Cursos.findById(req.body.curso);
   reserva.cursoCodigo = cursoDatos.codigo;
   reserva.cursoNombre = cursoDatos.softwareName;
   reserva.comentarios = req.body.comentarios;
-
   var data = new Actividades();
   data.potencial = req.body.potencial;
   data.actividad = 'Reservo curso: '+cursoDatos.codigo+' - '+cursoDatos.softwareName;
@@ -206,13 +208,16 @@ router.post('/reserva/nuevo/:codigo', async function(req, res, next){
   var time = new Date();
   var horaActual = time.getHours() + ":" + time.getMinutes();
   data.hora = horaActual;
-
-  
-  data.save().then(function(){    
-    reserva.save().then(function(){
-      return res.redirect('/ventas/reservas/'+req.params.codigo);
-    }).catch(next);
-  }).catch(next);
+  Cursos.findByIdAndUpdate( { '_id':req.body.curso },{ $inc: { reservas: 1 } },{new: true},
+    (err, todo) => {
+      if (err) return res.status(500).send(err);
+      data.save().then(function(){    
+        reserva.save().then(function(){
+          return res.redirect('/ventas/reservas/'+req.params.codigo);
+        }).catch(next);
+      }).catch(next);
+    }
+  )
   
 });
 
@@ -353,9 +358,9 @@ router.post('/pagos/editar/:id', async function(req, res, next){
   });
 });
 router.get('/pagos/borrar/:reserva/:id', async function(req, res, next){
-  var reserva = await Reservas.findById(req.params.reserva);
   var pago = await Pagos.findById(req.params.id);
-  await Reservas.findByIdAndUpdate({'_id': reserva._id},{montoPagado: reserva.montoPagado - pago.monto},{new:true})
+  await Reservas.findByIdAndUpdate({'_id': req.params.reserva},{ $inc: {montoPagado: -pago.monto}},{new:true})
+  
   Pagos.findByIdAndRemove(req.params.id, function(err, result) {
     if(err) return res.status(500).send(err);
     if(result) res.redirect('/ventas/pagos/');

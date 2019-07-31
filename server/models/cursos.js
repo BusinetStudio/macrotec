@@ -26,8 +26,10 @@ var CursoSchema = new mongoose.Schema({
   hora_inicio: {type: String, required: [true, "can't be blank"]},
   hora_fin: {type: String, required: [true, "can't be blank"]},
   dias: {type: Array, required: [true, "can't be blank"]},
+  horas_curso: {type: Number, required: [true, "can't be blank"]},
   precio: {type: Number, required: [true, "can't be blank"]},
   cuotas: {type: Number, required: [true, "can't be blank"]},
+  reservas: Number
 }, {timestamps: true});
 
 CursoSchema.plugin(uniqueValidator, {message: 'is already taken.'});

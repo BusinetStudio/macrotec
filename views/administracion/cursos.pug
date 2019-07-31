@@ -30,9 +30,10 @@ block content
                                                     th Cupos
                                                     th Clases
                                                     th Profesor
-                                                    th Fecha
-                                                    th Horas
+                                                    th Fecha                                                    
                                                     th Dias
+                                                    th Horario
+                                                    th Horas
                                                     th Precio
                                                     th Cuotas
                                                     th
@@ -46,9 +47,10 @@ block content
                                                     th Cupos
                                                     th Clases
                                                     th Profesor
-                                                    th Fecha
-                                                    th Horas
+                                                    th Fecha                                                    
                                                     th Dias
+                                                    th Horario
+                                                    th Horas
                                                     th Precio
                                                     th Cuotas
                                                     th
@@ -71,9 +73,9 @@ block content
                                                             - var fechaInicio = new Date(curso.fecha_inicio);
                                                             - var fechaFin = new Date(curso.fecha_fin);
                                                             = fechaInicio.getDate() + '/' + (fechaInicio.getMonth() + 1) + '/' + fechaInicio.getFullYear() + ' - ' + fechaFin.getDate() + '/' + (fechaFin.getMonth() + 1) + '/' + fechaFin.getFullYear()
-                                                        td
-                                                            = curso.hora_inicio+' - '+curso.hora_fin
                                                         td= curso.dias
+                                                        td= curso.hora_inicio+' - '+curso.hora_fin
+                                                        td= curso.horas_curso
                                                         td= 'S/.'+curso.precio
                                                         td= curso.cuotas
                                                         - var deleteUrl = "/administracion/cursos/eliminar/"+curso._id

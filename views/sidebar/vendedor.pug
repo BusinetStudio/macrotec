@@ -1,0 +1,42 @@
+.sidebar
+    .sidebar-inner
+      // ### $Sidebar Header ###
+      .sidebar-logo
+        .peers.ai-c.fxw-nw
+          .peer.peer-greed
+            a.sidebar-link.td-n(href='/')
+              .peers.ai-c.fxw-nw
+                .peer
+                  .logo
+                    img(src='/assets/static/images/logo.png', alt='')
+                .peer.peer-greed
+                  h5.lh-1.mB-0.logo-text Macrotec
+          .peer
+            .mobile-toggle.sidebar-toggle
+              a.td-n(href='')
+                i.ti-arrow-circle-left
+      // ### $Sidebar Menu ###
+      ul.sidebar-menu.scrollable.pos-r
+        li.nav-item.mT-30.active
+          a.sidebar-link(href='/home')
+            span.icon-holder
+              i.c-blue-500.ti-home
+            span.title Escritorio
+        li.nav-item.dropdown
+          a.dropdown-toggle(href='javascript:void(0);')
+            span.icon-holder
+              i.c-green-500.ti-money
+            span.title Ventas
+            span.arrow
+              i.ti-angle-right
+          ul.dropdown-menu
+            li
+              a.sidebar-link(href='/ventas/cuentas') Cuentas
+
+            li
+              a.sidebar-link(href='/ventas/clientes-potenciales') Clientes potenciales
+            li
+              a.sidebar-link(href='/ventas/reservas') Reservas
+            li
+              a.sidebar-link(href='/ventas/pagos') Pagos
+    

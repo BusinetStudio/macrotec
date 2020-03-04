@@ -32,6 +32,8 @@ block content
                                   .col-md-6
                                     p Celular:
                                       strong.ml-2= potencial.celular
+                                  .col-md-12.text-right
+                                    a.btn.btn-primary(href='/ventas/reserva/nuevo/'+potencial.dni) Reservar curso
 
                         .row
                             .col-md-6
@@ -51,14 +53,14 @@ block content
                                                   a.borrar(href='/ventas/actividades/'+potencial._id+'/borrar/'+actividad._id)
                                                     i.c-red-500.ti-close
                                       hr
-                                      form(action="/ventas/actividades/nuevo" method="post")
+                                      form(action="/ventas/actividades/nuevo" method="post" id='formActividades')
                                         .form-group
-                                          input.form-control.bdc-grey-200(type="text" name="actividad" placeholder="Actividad")
+                                          input.form-control.bdc-grey-200(type="text" id='actividadInput' name="actividad" placeholder="Actividad")
                                           input(type="hidden", name="potencial", value=potencial._id)
                                           input(type="hidden", name="usuario_id", value=usuario._id)
                                           input(type="hidden", name="usuario_nombre", value=usuario.nombreCompleto)
                                         .text-right
-                                          input.btn.btn-primary(type='submit' value="Agregar Actividad") 
+                                          input.btn.btn-primary(type='submit' id='SubmitActividadBtn' value="Agregar Actividad") 
                             .col-md-6
                                 .bd.bgc-white.p-20
                                   h4.c-grey-900 Tareas
@@ -95,9 +97,9 @@ block content
                                                       a.borrar(href='/ventas/tareas/'+potencial._id+'/borrar/'+tarea._id)
                                                         i.c-red-500.ti-close
 
-                                      form(action="/ventas/tareas/nuevo" method="post")
+                                      form(action="/ventas/tareas/nuevo" method="post" id="formTareas")
                                         .form-group
-                                          input.form-control.bdc-grey-200(type="text" name="tarea" placeholder="Tarea")
+                                          input.form-control.bdc-grey-200(type="text" name="tarea", id="inputTarea", placeholder="Tarea")
                                           input(type="hidden", name='potencial', value=potencial._id)
                                           input(type="hidden", name='usuario_id', value=usuario._id)
                                           input(type="hidden", name='usuario_nombre', value=usuario.nombreCompleto)
@@ -108,18 +110,62 @@ block content
                                                   .input-group
                                                       .input-group-addon.bgc-white.bd.bdwR-0
                                                           i.ti-calendar
-                                                      input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha', name="fecha", data-provide='datepicker' )
+                                                      input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha', name="fecha", id="fechaTarea", data-provide='datepicker' )
                                           .col-md-6
                                             .form-group
                                               .timepicker-input.input-icon.form-group
                                                   .input-group
                                                       .input-group-addon.bgc-white.bd.bdwR-0
                                                           i.ti-calendar
-                                                      input.form-control.bdc-grey-200.time-date(type='text', class="time-date", placeholder='Hora', name="hora")
+                                                      input.form-control.bdc-grey-200.time-date(type='text', class="time-date", placeholder='Hora', id="horaTarea", name="hora")
 
                                         .text-right
-                                          input.btn.btn-primary(type='submit' value="Agregar Tarea") 
-                            
+                                          input.btn.btn-primary(type='submit' id='SubmitTareaBtn' value="Agregar Tarea") 
+    script(type='text/javascript').
+        function checkActividadesForm() {
+            var actividadInput = document.getElementById("actividadInput").value;
+            var canSubmit = false;
+            if (actividadInput == "" || !isNaN(actividadInput)) {
+                canSubmit = false;
+            } else {
+                canSubmit = true;
+            }
+            if (canSubmit) {
+                document.getElementById("SubmitActividadBtn").disabled = false;
+            } else {
+                document.getElementById("SubmitActividadBtn").disabled = true;
+            }
+        };   
+        function checkTareasForm() {
+            var inputTarea = document.getElementById("inputTarea").value;
+            var fechaTarea = document.getElementById("fechaTarea").value;
+            var horaTarea = document.getElementById("horaTarea").value;
+            var canSubmit = false;
+            if (
+              inputTarea == "" || !isNaN(inputTarea) ||
+              fechaTarea == "" || !isNaN(fechaTarea) ||
+              horaTarea == "" || !isNaN(horaTarea)
+            ){
+                canSubmit = false;
+            } else {
+                canSubmit = true;
+            }
+            if (canSubmit) {
+                document.getElementById("SubmitTareaBtn").disabled = false;
+            } else {
+                document.getElementById("SubmitTareaBtn").disabled = true;
+            }
+        };  
+        const selectElementActividades = document.querySelector('#formActividades');
+        const selectElementTareas = document.querySelector('#formTareas');
+        checkActividadesForm()
+        checkTareasForm()
+        selectElementActividades.addEventListener('click',function(){
+            checkActividadesForm()
+        })
+        selectElementTareas.addEventListener('click',function(){
+            checkTareasForm()
+        })
                        
 
 

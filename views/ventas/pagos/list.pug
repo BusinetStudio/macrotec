@@ -1,0 +1,49 @@
+extends ../../layout
+block content
+    div
+        // #Left Sidebar ====================
+        include ../../sidebar/index
+        // #Main ============================
+        .page-container
+            include ../../header
+            main.main-content.bgc-grey-100
+                #mainContent
+                    .container-fluid
+                        h4.c-grey-900.mT-10.mB-30 Pagos
+                        .row
+                            .col-md-12
+                                .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Documento
+                                                    th Fecha
+                                                    th Monto
+                                                    th Imagen
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th Documento
+                                                    th Fecha
+                                                    th Monto
+                                                    th Imagen
+                                                    th
+                                            tbody
+                                                if pagos
+                                                    each pago in pagos
+                                                        tr
+                                                            td= pago.documento
+                                                            td= pago.fecha
+                                                            td= pago.monto
+                                                            td
+                                                              a(target='_blank' href=pago.imgDeposito) Ver imagen
+                                                            td.text-right
+                                                              - var editarLink = "/ventas/pagos/editar/"+pago._id;
+                                                              a.editar(href=editarLink)
+                                                                i.c-orange-500.ti-pencil.mr-2
+                                                              - var eliminarLink = "/ventas/pagos/borrar/"+pago.reserva+'/'+pago._id;
+                                                              a.borrar(href=eliminarLink)
+                                                                i.c-red-500.ti-close
+                    
+    include ../../footer 

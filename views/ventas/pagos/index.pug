@@ -19,39 +19,24 @@ block content
                                                 tr
                                                     th Nombre Completo
                                                     th DNI
-                                                    th Documento
-                                                    th Monto
-                                                    th Fecha
-                                                    th Deposito
+                                                    th Email
                                                     th
                                             tfoot
                                                 tr
                                                     th Nombre Completo
                                                     th DNI
-                                                    th Documento
-                                                    th Monto
-                                                    th Fecha
-                                                    th Deposito
+                                                    th Email
                                                     th
                                             tbody
-                                                if pagos
-                                                    each pago in pagos
+                                                if clientes
+                                                    each cliente in clientes
                                                         tr
-                                                            td= pago.clienteNombre
-                                                            td= pago.dni
-                                                            td= pago.documento
-                                                            td= 'S/. '+pago.monto
-                                                            td  
-                                                                - var fecha = new Date(pago.fecha);
-                                                                = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear()
-                                                            td
-                                                                a(target="_blank", href=pago.imgDeposito) Ver deposito
+                                                            td= cliente.nombreCompleto
+                                                            td= cliente.dni
+                                                            td= cliente.email
                                                             td.text-right
-                                                                - var editarLink = "/ventas/pagos/editar/"+pago._id;
+                                                                - var editarLink = "/ventas/pagos/"+cliente.dni;
                                                                 a.editar(href=editarLink)
-                                                                    i.c-orange-500.ti-pencil.mr-2                                                                    
-                                                                - var eliminarLink = "/ventas/pagos/borrar/"+pago.reserva+"/"+pago._id;
-                                                                a.borrar(href=eliminarLink)
-                                                                    i.c-red-500.ti-close
+                                                                    i.c-green-500.ti-arrow-right.mr-2   
                     
     include ../../footer 

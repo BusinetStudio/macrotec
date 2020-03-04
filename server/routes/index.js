@@ -23,6 +23,13 @@ function isAdmin(req, res, next){
     res.redirect('/');
   }
 }
+function isVendedor(req, res, next){
+  if(req.user.tipoUsuario == 'Vendedor' || req.user.tipoUsuario == 'Admin'){
+    next();
+  } else {
+    res.redirect('/');
+  }
+}
 /* GET home page. */
 router.get('/',loggedInHome, function(req, res, next) {
   res.render('index', { title: 'Macrotec App', usuario: req.user});
@@ -63,11 +70,11 @@ router.get('/salir',loggedIn, function(req, res, next) {
 
 
 //Routes
-router.use('/usuarios', isAdmin, require('./usuarios'));
+router.use('/usuarios', loggedIn, isAdmin, require('./usuarios'));
 
-router.use('/administracion', isAdmin, require('./administracion'));
-router.use('/cuenta', loggedIn, require('./cuenta/'));
-router.use('/ventas', loggedIn, require('./ventas/'));
+router.use('/administracion', loggedIn, isAdmin, require('./administracion'));
+router.use('/cuenta', loggedIn, isVendedor, require('./cuenta/'));
+router.use('/ventas', loggedIn, isVendedor, require('./ventas/'));
 
 
 module.exports = router;

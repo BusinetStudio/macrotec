@@ -1,6 +1,7 @@
 import * as $ from 'jquery';
 import 'datatables.net';
-
+import 'datatables.net-dt';
+import 'datatables.net-responsive-bs4';
 export default (function () {
   /*$.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
@@ -45,7 +46,8 @@ export default (function () {
           "sSortDescending": ": Activar para ordenar la columna de manera descendente"
       }
     },
-    ordering: true
+    ordering: true,
+    responsive: true
   });
   $( '.tabla-filtro' ).on( 'change', function () {
     table

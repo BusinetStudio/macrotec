@@ -11,30 +11,51 @@ block content
                     .container-fluid
                         h4.c-grey-900.mT-10.mB-30 Nueva reserva
                         .row.justify-content-center
-                            .col-md-6
-                                form(action="/ventas/reserva/nuevo/"+curso.codigo, method="POST" )
+                            .col-md-6 
+                                form(action="/ventas/reserva/nuevo/", method="POST", id='form' )
                                     input(type="hidden" name="vendedor" value=usuario._id)
                                     input(type="hidden" name="vendedorNombre" value=usuario.nombreCompleto)
-                                    h5.c-grey-900= curso.codigo +' - '+curso.softwareName
-                                    input(type="hidden", name="curso" value=curso._id)
-                                    .form-group 
-                                        p Cliente
-                                        select.tabla-filtro.form-control.select2(name="potencial")
-                                            option(selected, disabled) Seleccionar cliente
-                                            each potencial in potenciales
-                                                option(value=potencial._id)= potencial.dni + ' - ' + potencial.nombreCompleto
+                                    input(type="hidden" name="potencial" value=potencial._id)
+                                    h5.c-grey-900= potencial.nombreCompleto +' - '+potencial.dni
+                                    .form-group
+                                        select.tabla-filtro.form-control.select2(data-index="0", id='cursoId' name='curso')
+                                            option(selected disabled) Seleccionar codigo
+                                            if cursos
+                                                each curso in cursos
+                                                    option(value=curso._id)= curso.codigo+' - '+curso.softwareName
                                     .form-group
                                         p Fecha de reserva
                                         .timepicker-input.input-icon.form-group
                                             .input-group
                                                 .input-group-addon.bgc-white.bd.bdwR-0
                                                     i.ti-calendar
-                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de reserva', name="fechaReserva", data-provide='datepicker' )
+                                                input.form-control.bdc-grey-200.start-date(type='text', placeholder='Fecha de reserva', name="fechaReserva", data-provide='datepicker', id='fechaReserva' )
                                    
                                     .form-group
                                         p Comentarios
                                         textarea.form-control(placeholder="Comentarios" name="comentarios")
-                                    a.btn.btn-secondary(href="/ventas/reservas/"+curso.codigo class="mr-2") Cancelar
-                                    input.btn.btn-primary(type='submit' value="Guardar")   
-                    
+                                    a.btn.btn-secondary(href="/ventas/actividades/"+potencial._id class="mr-2") Cancelar
+                                    input.btn.btn-primary(type='submit', id='SubmitBtn', value="Guardar")   
+    script(type='text/javascript').
+        function checkForm() {
+            
+            var curso = document.getElementById("cursoId").value;
+            var fechaReserva = document.getElementById("fechaReserva").value;
+            var canSubmit = false;
+            if (curso == "" || !isNaN(curso) || fechaReserva == "" || !isNaN(fechaReserva)) {
+                canSubmit = false;
+            } else {
+                canSubmit = true;
+            }
+            if (canSubmit) {
+                document.getElementById("SubmitBtn").disabled = false;
+            } else {
+                document.getElementById("SubmitBtn").disabled = true;
+            }
+        };   
+        const selectElement = document.querySelector('#form');
+        checkForm()
+        selectElement.addEventListener('click',function(){
+            checkForm()
+        })            
     include ../../footer 

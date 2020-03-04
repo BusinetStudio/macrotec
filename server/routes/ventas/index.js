@@ -3,11 +3,12 @@ var router = require('express').Router();
 var passport = require('passport');
 var crypto = require('crypto');
 var formidable = require('formidable');
+const moment = require('moment')
 
 var Productos = mongoose.model('Productos');
 var Cursos = mongoose.model('Cursos');
 var Usuarios = mongoose.model('Usuarios');
-var Potenciales = mongoose.model('Potenciales');
+var Clientes = mongoose.model('Clientes');
 var Reservas = mongoose.model('Reservas');
 var Pagos = mongoose.model('Pagos');
 var Actividades = mongoose.model('Actividades');
@@ -23,8 +24,8 @@ var peruGeo = {
 router.get('/clientes-potenciales', async function(req, res, next){
   var vendedores = await Usuarios.find({ tipoUsuario: {$in: ['Admin', 'Vendedor']} });
   var productos = await Productos.find();
-  var cursos = await Cursos.find();
-  var potenciales = await Potenciales.find();
+  var cursos = await Cursos.find({fecha_fin: {$gte: new Date(moment())}});
+  var potenciales = await Clientes.find();
   var data = {
     title: 'Clientes Potenciales',
     usuario: req.user,
@@ -40,7 +41,7 @@ router.get('/clientes-potenciales', async function(req, res, next){
 
 router.get('/clientes-potenciales/nuevo', async function(req, res, next){
   var productos = await Productos.find();
-  var cursos = await Cursos.find();
+  var cursos = await Cursos.find({fecha_fin: {$gte: new Date(moment())}});
   var cuentas = await Cuentas.find();
   var data = {
     title: 'Agregar Cliente Potencial',
@@ -53,7 +54,7 @@ router.get('/clientes-potenciales/nuevo', async function(req, res, next){
 });
 
 router.post('/clientes-potenciales/nuevo', async function(req, res, next){
-  var potencial = new Potenciales();
+  var potencial = new Clientes();
   potencial.nombreCompleto = req.body.nombreCompleto;
   potencial.dni = req.body.dni;
   potencial.telefono = req.body.telefono;
@@ -82,14 +83,14 @@ router.post('/clientes-potenciales/nuevo', async function(req, res, next){
   }).catch(next);
 });
 router.post('/clientes-potenciales/getByDni', async function(req, res, next){
-  var potencial = await Potenciales.find({dni: {$in: req.body.dni}});
+  var potencial = await Clientes.find({dni: {$in: req.body.dni}});
   res.json(potencial)
 });
 router.get('/clientes-potenciales/editar/:id', async function(req, res, next){
   var vendedores = await Usuarios.find({ privilege: 'Vendedor', privilege: 'Admin'});
   var productos = await Productos.find();
   var cursos = await Cursos.find();
-  var potencial = await Potenciales.findById(req.params.id);
+  var potencial = await Clientes.findById(req.params.id);
   var cuentas = await Cuentas.find();
   var data = {
     title: 'Editar Cliente Potencial',
@@ -120,7 +121,7 @@ router.post('/clientes-potenciales/editar', async function(req, res, next){
       data[key] = req.body[key];
     }
   }
-  Potenciales.findByIdAndUpdate( query,data,{new: true},
+  Clientes.findByIdAndUpdate( query,data,{new: true},
     (err, todo) => {
       if (err) return res.status(500).send(err);
       res.redirect('/ventas/clientes-potenciales/');
@@ -129,7 +130,7 @@ router.post('/clientes-potenciales/editar', async function(req, res, next){
 });
 
 router.get('/clientes-potenciales/borrar/:id', function(req, res, next){
-  Potenciales.findByIdAndRemove(req.params.id, function(err, result) {
+  Clientes.findByIdAndRemove(req.params.id, function(err, result) {
     if(err) return res.status(500).send(err);
     if(result) res.redirect('/ventas/clientes-potenciales/');
   });
@@ -137,8 +138,8 @@ router.get('/clientes-potenciales/borrar/:id', function(req, res, next){
 
 
 router.get('/reservas', async function(req, res, next){
-  var cursos = await Cursos.find();
-  var data = {
+  var cursos = await Cursos.find({fecha_fin: {$gte: new Date(moment())}});
+  var data = { 
     title: 'Reservas',
     usuario: req.user,
     cursos: cursos,
@@ -160,30 +161,24 @@ router.get('/reservas/:codigo', async function(req, res, next){
   res.render('ventas/reservas/reservas',data)
 });
 router.get('/reserva/nuevo/:codigo', async function(req, res, next){
-  
-  var reservas = await Reservas.find({ tipoUsuario: {$in: ['Admin', 'Vendedor']}, cursoCodigo: {$in: req.params.codigo} });
-  var curso = await Cursos.find({codigo: {$in: req.params.codigo}});
-  if(curso.cupos >= curso.reservas){
-    return res.redirect('/ventas/reservas/'+req.params.codigo);
-  }
-  var potenciales = await Potenciales.find();
+  var cursos = await Cursos.find({fecha_fin: {$gte: new Date(moment())}});
+  var potencial = await Clientes.findOne({dni: req.params.codigo});
   var data = {
     title: 'Reservas',
     usuario: req.user,
-    reservas: reservas,
-    curso: curso[0],
-    potenciales: potenciales
+    cursos: cursos,
+    potencial: potencial
   }
   res.render('ventas/reservas/nuevo',data)
 });
 
-router.post('/reserva/nuevo/:codigo', async function(req, res, next){
+router.post('/reserva/nuevo/', async function(req, res, next){
   cursoDatos = await Cursos.findById(req.body.curso);
   var reserva = new Reservas();
   reserva.vendedor = req.body.vendedor;
   reserva.vendedorNombre = req.body.vendedorNombre;
   reserva.potencial = req.body.potencial;
-  potencialDatos = await Potenciales.findById(req.body.potencial);
+  potencialDatos = await Clientes.findById(req.body.potencial);
   reserva.potencialNombre = potencialDatos.nombreCompleto;
   reserva.dni = potencialDatos.dni;
   reserva.telefono = potencialDatos.telefono;
@@ -213,7 +208,12 @@ router.post('/reserva/nuevo/:codigo', async function(req, res, next){
       if (err) return res.status(500).send(err);
       data.save().then(function(){    
         reserva.save().then(function(){
-          return res.redirect('/ventas/reservas/'+req.params.codigo);
+          Clientes.findOne({_id: reserva.potencial}, function(err, cliente){
+            cliente.cliente = true;
+            cliente.save().then(function(){
+              return res.redirect('/ventas/reservas/');
+            })
+          })
         }).catch(next);
       }).catch(next);
     }
@@ -223,7 +223,7 @@ router.post('/reserva/nuevo/:codigo', async function(req, res, next){
 
 router.get('/reserva/editar/:id', async function(req, res, next){
   var reserva = await Reservas.findById(req.params.id);
-  var potenciales = await Potenciales.find();
+  var potenciales = await Clientes.find();
   var data = {
     title: 'Reservas',
     usuario: req.user,
@@ -257,13 +257,22 @@ router.get('/reserva/borrar/:codigo/:id', async function(req, res, next){
 
 
 router.get('/pagos/', async function(req, res, next){
-  var pagos = await Pagos.find();
+  var clientes = await Clientes.find({cliente: true});
+  var data = {
+    title: 'Pagos',
+    usuario: req.user,
+    clientes: clientes,
+  }
+  res.render('ventas/pagos/',data)
+});
+router.get('/pagos/:dni', async function(req, res, next){
+  var pagos = await Pagos.find({dni: req.params.dni});
   var data = {
     title: 'Pagos',
     usuario: req.user,
     pagos: pagos,
   }
-  res.render('ventas/pagos/',data)
+  res.render('ventas/pagos/list',data)
 });
 router.get('/pagos/nuevo/:id', async function(req, res, next){
   var reserva = await Reservas.findById(req.params.id);
@@ -313,7 +322,7 @@ router.post('/pagos/nuevo/', async function(req, res, next){
 });
 
 router.get('/pagos/editar/:id', async function(req, res, next){
-  var pago = await Pagos.findById(req.params.id);
+  var pago = await Pagos.findOne({_id: req.params.id});
   var data = {
     title: 'Pagos',
     usuario: req.user,
@@ -434,7 +443,7 @@ router.post('/cuentas/editar/:id', async function(req, res, next){
 router.get('/actividades/:id', async function(req, res, next){
   var actividades = await Actividades.find({potencial: req.params.id});
   var tareas = await Tareas.find({potencial: req.params.id, usuario_id: req.user._id});
-  var potencial = await Potenciales.findById(req.params.id);
+  var potencial = await Clientes.findById(req.params.id);
   var data = {
     title: 'Actividades',
     usuario: req.user,

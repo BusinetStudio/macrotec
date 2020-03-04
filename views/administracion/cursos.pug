@@ -19,11 +19,11 @@ block content
 
 
                                     .tablaEditable
-                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                        table#dataTable.table.table-striped.table-bordered.display.responsive.nowrap(cellspacing='0', width='100%')
                                             thead
                                                 tr
-                                                    th Codigo
-                                                    th Nombre del Software
+                                                    th(data-priority="1") Codigo
+                                                    th(data-priority="2") Nombre del Software
                                                     th Sede
                                                     th Modalidad
                                                     th Aula
@@ -36,7 +36,7 @@ block content
                                                     th Horas
                                                     th Precio
                                                     th Cuotas
-                                                    th
+                                                    th(data-priority="1")
                                             tfoot
                                                 tr
                                                     th Codigo

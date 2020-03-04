@@ -15,13 +15,13 @@ block content
                                 form(action="/cuenta/perfil/", method="POST" )
                                     .form-group 
                                         p Nombre Completo
-                                        input.form-control(type="text", name="nombreCompleto")
+                                        input.form-control(type="text", value=usuario.nombreCompleto, name="nombreCompleto")
                                     .form-group
                                         p DNI
-                                        input.form-control(type="text", name="dni")
+                                        input.form-control(type="text", value=usuario.dni, name="dni")
                                     .form-group
                                         p Email
-                                        input.form-control(type="text", name="email")
+                                        input.form-control(type="text", value=usuario.email,  name="email")
                                     a.btn.btn-secondary(href="/home" class="mr-2") Cancelar  
                                     input.btn.btn-primary(type='submit' value="Guardar")   
                     

@@ -3,6 +3,7 @@ var router = require('express').Router();
 var Productos = mongoose.model('Productos');
 var Cursos = mongoose.model('Cursos');
 var Usuarios = mongoose.model('Usuarios');
+const moment = require('moment')
 
 router.get('/productos/', function(req, res, next) {
   Productos.find(function(err, result) {
@@ -56,7 +57,7 @@ router.get('/cursos/', function(req, res, next) {
     Usuarios.find({tipoUsuario: 'Profesor'},function(err2, result2) {
       datos['profesores'] = result2;
       datos['usuario'] = req.user;
-      Cursos.find((err, result) =>{
+      Cursos.find({fecha_fin: {$gte: new Date(moment())}},(err, result) =>{
         datos['cursos'] = result;
         res.render('administracion/cursos',datos);
       });

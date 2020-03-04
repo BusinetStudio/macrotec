@@ -31,14 +31,10 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
-if(isProduction){
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://ivan:rogue195@ds237267.mlab.com:37267/heroku_nt68cjwd');
-  mongoose.set('debug', true);
-}
-require('../models');
 
+  mongoose.connect('mongodb://macrotec:macrotec#1@ds237267.mlab.com:37267/heroku_nt68cjwd', {useNewUrlParser: true});
+  mongoose.set('debug', true);
+  require('../models');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session(

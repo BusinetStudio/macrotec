@@ -49,6 +49,37 @@ export default (function () {
     ordering: true,
     responsive: true
   });
+
+  var table = $('#dataTableSinFiltro').DataTable({
+    language: {
+      "sProcessing":     "Procesando...",
+      "sLengthMenu":     "Mostrar _MENU_ registros",
+      "sZeroRecords":    "No se encontraron resultados",
+      "sEmptyTable":     "Ningún dato disponible en esta tabla",
+      "sInfo":           "Mostrando actividades desde el _START_ hasta el _END_ de un total de _TOTAL_ actividades",
+      "sInfoEmpty":      "No hay actividades Registradas",
+      "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+      "sInfoPostFix":    "",
+      "sSearch":         "Buscar:",
+      "sUrl":            "",
+      "sInfoThousands":  ",",
+      "sLoadingRecords": "Cargando...",
+      "oPaginate": {
+          "sFirst":    "Primero",
+          "sLast":     "Último",
+          "sNext":     "Siguiente",
+          "sPrevious": "Anterior"
+      },
+      "oAria": {
+          "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+      }
+    },
+    ordering: false,
+    responsive: true,
+    searching: false,
+    paging: false
+  });
   $( '.tabla-filtro' ).on( 'change', function () {
     table
         .column( $(this).data('index') )

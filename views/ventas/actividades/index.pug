@@ -36,23 +36,12 @@ block content
                                     a.btn.btn-primary(href='/ventas/reserva/nuevo/'+potencial.dni) Reservar curso
 
                         .row
-                            .col-md-6
+                            .col-md-12
                                 .bd.bgc-white.p-20
                                   h4.c-grey-900 Actividades
                                   .layers
                                     .layer.w-100.mB-10
                                     .layer.w-100
-                                      ul.list-task.list-group(data-role='tasklist', style="max-height: 300px; overflow: auto;")
-                                        each actividad in actividades
-                                          li.list-group-item.bdw-0(data-role='task')
-                                              label.peers.peer-greed.js-sb.ai-c(for='inputCall2')
-                                                span.peer.peer-greed= actividad.actividad
-                                                  = ' - '+actividad.usuario_nombre
-                                                  span.badge.badge-pill.ml-3.badge-success.lh-0.p-10= actividad.fecha
-                                                span.peers
-                                                  a.borrar(href='/ventas/actividades/'+potencial._id+'/borrar/'+actividad._id)
-                                                    i.c-red-500.ti-close
-                                      hr
                                       form(action="/ventas/actividades/nuevo" method="post" id='formActividades')
                                         .form-group
                                           input.form-control.bdc-grey-200(type="text" id='actividadInput' name="actividad" placeholder="Actividad")
@@ -61,7 +50,37 @@ block content
                                           input(type="hidden", name="usuario_nombre", value=usuario.nombreCompleto)
                                         .text-right
                                           input.btn.btn-primary(type='submit' id='SubmitActividadBtn' value="Agregar Actividad") 
-                            .col-md-6
+                                      ul.list-task.list-group(data-role='tasklist', style="max-height: 300px; overflow: auto;")
+                                        table#dataTableSinFiltro.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th Tipo de Actividad
+                                                    th Usuario
+                                                    th Fecha
+                                                    th Hora
+                                                    th 
+                                            tfoot
+                                                tr
+                                                    th Tipo de Actividad
+                                                    th Usuario
+                                                    th Fecha
+                                                    th Hora 
+                                                    th
+                                            tbody
+                                                if actividades
+                                                    each actividad in actividades
+                                                        tr
+                                                            td= actividad.actividad
+                                                            td= actividad.usuario_nombre
+                                                            td= actividad.fecha
+                                                            td= actividad.hora
+                                                            td.text-right
+                                                                a.borrar(href='/ventas/actividades/'+potencial._id+'/borrar/'+actividad._id)
+                                                                    i.c-red-500.ti-close
+                                        
+                                      hr
+                                      
+                            .col-md-12
                                 .bd.bgc-white.p-20
                                   h4.c-grey-900 Tareas
                                   .layers#tareasWrap

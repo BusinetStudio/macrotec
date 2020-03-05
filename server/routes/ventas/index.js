@@ -468,6 +468,10 @@ router.post('/actividades/nuevo/', async function(req, res, next){
   var time = new Date();
   var horaActual = time.getHours() + ":" + time.getMinutes();
   data.hora = horaActual;
+  console.log("------------------------------------");
+  console.log(data.hora);
+  console.log(data.fecha);
+  console.log("------------------------------------");
   data.save().then(function(){
     return res.redirect('/ventas/actividades/'+req.body.potencial);
   }).catch(next);

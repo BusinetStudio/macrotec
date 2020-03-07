@@ -4,10 +4,10 @@ var uniqueValidator = require('mongoose-unique-validator');
 var ReservaSchema = new mongoose.Schema({
   vendedor: {type: String, required: [true, "can't be blank"]},
   vendedorNombre: {type: String, required: [true, "can't be blank"]},
-  potencial: {unique : true, type: String, required: [true, "can't be blank"]},
+  potencial: {type: String, required: [true, "can't be blank"]},
   potencialNombre: {type: String, required: [true, "can't be blank"]},
-  dni: {type: String, required: [true, "can't be blank"], unique : true},
-  telefono: { type: String, required: [true, "can't be blank"] },
+  dni: {type: String, required: [true, "can't be blank"]},
+  telefono: { type: String, required: [true, "can't be blank"] }, 
   celular: { type: String, required: [true, "can't be blank"] },
   email: {type: String, required: [true, "can't be blank"] },
   fechaReserva: {type: String, required: [true, "can't be blank"]},
@@ -16,6 +16,7 @@ var ReservaSchema = new mongoose.Schema({
   cursoNombre: {type: String, required: [true, "can't be blank"]},
   montoPagado: {type: Number, default: 0},
   estado: {type: String, enum: ['Pendiente','Matriculado'], default: 'Pendiente', required: [true, "can't be blank"]},
+  cursoID: {type: Array, required: [true, "can't be blank"], unique:true},
   comentarios: String,
 }, {timestamps: true});
 

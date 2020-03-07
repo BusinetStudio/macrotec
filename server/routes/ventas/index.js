@@ -175,6 +175,7 @@ router.get('/reserva/nuevo/:codigo', async function(req, res, next){
 router.post('/reserva/nuevo/', async function(req, res, next){
   cursoDatos = await Cursos.findById(req.body.curso);
   var reserva = new Reservas();
+  var pago = new Pagos();
   reserva.vendedor = req.body.vendedor;
   reserva.vendedorNombre = req.body.vendedorNombre;
   reserva.potencial = req.body.potencial;
@@ -189,6 +190,10 @@ router.post('/reserva/nuevo/', async function(req, res, next){
   reserva.cursoCodigo = cursoDatos.codigo;
   reserva.cursoNombre = cursoDatos.softwareName;
   reserva.comentarios = req.body.comentarios;
+  reserva.cursoID.push(reserva.dni);
+  reserva.cursoID.push(reserva.curso);
+  pago.reserva = reserva;
+  
   var data = new Actividades();
   data.potencial = req.body.potencial;
   data.actividad = 'Reservo curso: '+cursoDatos.codigo+' - '+cursoDatos.softwareName;
@@ -214,6 +219,7 @@ router.post('/reserva/nuevo/', async function(req, res, next){
               return res.redirect('/ventas/reservas/');
             })
           })
+        pago.save();
         }).catch(next);
       }).catch(next);
     }
@@ -311,6 +317,7 @@ router.post('/pagos/nuevo/', async function(req, res, next){
       for(key in datos){
         pago[key] = datos[key];
       }
+      pago.estado = "Pendiente";
       pago.save().then(function(){
         return res.redirect('/ventas/pagos/');
       }).catch(next);

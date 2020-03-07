@@ -9,6 +9,8 @@ var PagosSchema = new mongoose.Schema({
   documento: String,
   fecha:{ type: String, required: [true, "can't be blank"]},
   monto: { type: Number, required: [true, "can't be blank"]},
+  estado: { type:String, enum:["Pendiente","Pagado","Vencido"], required: [true, "can't be blank"]},
+  montoPagado: {type: Number, default: 0},
   imgDeposito: String,
 }, {timestamps: true});
 

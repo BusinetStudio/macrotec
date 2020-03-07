@@ -17,6 +17,8 @@ block content
                                         table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
                                             thead
                                                 tr
+                                                    th Nombre
+                                                    th Estado
                                                     th Documento
                                                     th Fecha
                                                     th Monto
@@ -24,6 +26,8 @@ block content
                                                     th
                                             tfoot
                                                 tr
+                                                    th Nombre
+                                                    th Estado
                                                     th Documento
                                                     th Fecha
                                                     th Monto
@@ -33,6 +37,8 @@ block content
                                                 if pagos
                                                     each pago in pagos
                                                         tr
+                                                            td= pago.clienteNombre
+                                                            td= pago.estado
                                                             td= pago.documento
                                                             td= pago.fecha
                                                             td= pago.monto

@@ -173,41 +173,45 @@ router.get('/reserva/nuevo/:codigo', async function(req, res, next){
 });
 
 router.post('/reserva/nuevo/', async function(req, res, next){
-  cursoDatos = await Cursos.findById(req.body.curso);
-  var reserva = new Reservas();
-  var pago = new Pagos();
-  reserva.vendedor = req.body.vendedor;
-  reserva.vendedorNombre = req.body.vendedorNombre;
-  reserva.potencial = req.body.potencial;
-  potencialDatos = await Clientes.findById(req.body.potencial);
-  reserva.potencialNombre = potencialDatos.nombreCompleto;
-  reserva.dni = potencialDatos.dni;
-  reserva.telefono = potencialDatos.telefono;
-  reserva.celular = potencialDatos.celular;
-  reserva.email = potencialDatos.email;
-  reserva.fechaReserva = req.body.fechaReserva;
-  reserva.curso = req.body.curso;
-  reserva.cursoCodigo = cursoDatos.codigo;
-  reserva.cursoNombre = cursoDatos.softwareName;
-  reserva.comentarios = req.body.comentarios;
-  reserva.cursoID.push(reserva.dni);
-  reserva.cursoID.push(reserva.curso);
-  pago.reserva = reserva;
-  
-  var data = new Actividades();
-  data.potencial = req.body.potencial;
-  data.actividad = 'Reservo curso: '+cursoDatos.codigo+' - '+cursoDatos.softwareName;
-  data.usuario_id = req.user._id;
-  data.usuario_nombre = req.user.nombreCompleto;
-  var today = new Date();
-  var dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
-  if (dd < 10) dd = '0' + dd;
-  if (mm < 10) mm = '0' + mm;
-  var today = dd + '/' + mm + '/' + yyyy;
-  data.fecha = today;
-  var time = new Date();
-  var horaActual = time.getHours() + ":" + time.getMinutes();
-  data.hora = horaActual;
+  try{
+    cursoDatos = await Cursos.findById(req.body.curso);
+    var reserva = new Reservas();
+    var pago = new Pagos();
+    reserva.vendedor = req.body.vendedor;
+    reserva.vendedorNombre = req.body.vendedorNombre;
+    reserva.potencial = req.body.potencial;
+    potencialDatos = await Clientes.findById(req.body.potencial);
+    reserva.potencialNombre = potencialDatos.nombreCompleto;
+    reserva.dni = potencialDatos.dni;
+    reserva.telefono = potencialDatos.telefono;
+    reserva.celular = potencialDatos.celular;
+    reserva.email = potencialDatos.email;
+    reserva.fechaReserva = req.body.fechaReserva;
+    reserva.curso = req.body.curso;
+    reserva.cursoCodigo = cursoDatos.codigo;
+    reserva.cursoNombre = cursoDatos.softwareName;
+    reserva.comentarios = req.body.comentarios;
+    reserva.cursoID.push(reserva.dni);
+    reserva.cursoID.push(reserva.curso);
+    pago.reserva = reserva;
+    
+    var data = new Actividades();
+    data.potencial = req.body.potencial;
+    data.actividad = 'Reservo curso: '+cursoDatos.codigo+' - '+cursoDatos.softwareName;
+    data.usuario_id = req.user._id;
+    data.usuario_nombre = req.user.nombreCompleto;
+    var today = new Date();
+    var dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    var today = dd + '/' + mm + '/' + yyyy;
+    data.fecha = today;
+    var time = new Date();
+    var horaActual = time.getHours() + ":" + time.getMinutes();
+    data.hora = horaActual;
+  } catch (err){
+    next(err);
+  }
   Cursos.findByIdAndUpdate( { '_id':req.body.curso },{ $inc: { reservas: 1 } },{new: true},
     (err, todo) => {
       if (err) return res.status(500).send(err);

@@ -276,6 +276,7 @@ router.get('/pagos/:dni', async function(req, res, next){
 });
 router.get('/pagos/nuevo/:id', async function(req, res, next){
   var reserva = await Reservas.findById(req.params.id);
+  var pagos = await reservas.find();
   var data = {
     title: 'Pagos',
     usuario: req.user,
@@ -311,6 +312,7 @@ router.post('/pagos/nuevo/', async function(req, res, next){
       for(key in datos){
         pago[key] = datos[key];
       }
+      pago.cursoNombre = reserva.cursoNombre;
       pago.save().then(function(){
         return res.redirect('/ventas/pagos/');
       }).catch(next);

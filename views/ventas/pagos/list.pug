@@ -17,14 +17,18 @@ block content
                                         table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
                                             thead
                                                 tr
+                                                    th Nota
                                                     th Documento
+                                                    th Estado
                                                     th Fecha
                                                     th Monto
                                                     th Imagen
                                                     th
                                             tfoot
                                                 tr
+                                                    th Nota
                                                     th Documento
+                                                    th Estado
                                                     th Fecha
                                                     th Monto
                                                     th Imagen
@@ -33,7 +37,9 @@ block content
                                                 if pagos
                                                     each pago in pagos
                                                         tr
+                                                            td= pago.cursoNombre
                                                             td= pago.documento
+                                                            td= pago.estado
                                                             td= pago.fecha
                                                             td= pago.monto
                                                             td

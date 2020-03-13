@@ -275,11 +275,16 @@ router.get('/pagos/:dni', async function(req, res, next){
   res.render('ventas/pagos/list',data)
 });
 router.get('/pagos/nuevo/:id', async function(req, res, next){
-  var reserva = await Reservas.findById(req.params.id);
-  var pagos = await reservas.find();
+  console.log(req.params.id);
+  //var cliente = await Clientes.findById(req.params.id);
+  //console.log(cliente);
+  var user = await Usuarios.find({dni:req.params.id});
+  var reserva = await Reservas.find({dni:req.params.id, estado:"Pendiente"});
+  console.log(reserva);
+  //var pagos = await reservas.find();
   var data = {
     title: 'Pagos',
-    usuario: req.user,
+    usuario: user,
     reserva: reserva,
   }
   res.render('ventas/pagos/nuevo',data)

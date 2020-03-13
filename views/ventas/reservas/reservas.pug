@@ -14,12 +14,6 @@ block content
                                 a.btn.btn-primary.c-white(href='/ventas/reservas')
                                     i.c-white-500.ti-arrow-left.mr-2
                                     = 'Anterior'
-                        .row.align-items-center.mb-4
-                            .col-md-auto
-                                if curso.cupos > curso.reservas
-                                    a.btn.btn-primary.c-white(href='/ventas/reserva/nuevo/'+curso.codigo)
-                                        i.c-white-500.ti-plus.mr-2
-                                        = 'Agregar reserva'  
                             .col
                                 h6.c-grey-900.mb-0 Vacantes:
                                     - var reservasCantidad

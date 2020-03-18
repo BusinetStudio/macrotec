@@ -151,6 +151,7 @@ router.get('/reservas/:codigo', async function(req, res, next){
   var reservas = await Reservas.find({ cursoCodigo: {$in: req.params.codigo}, estado: 'Matriculado' });
   var pendientes = await Reservas.find({ cursoCodigo: {$in: req.params.codigo}, estado: 'Pendiente' });
   var curso = await Cursos.find({codigo: {$in: req.params.codigo}});
+  
   var data = {
     title: 'Reservas',
     usuario: req.user,
@@ -222,12 +223,20 @@ router.post('/reserva/nuevo/', async function(req, res, next){
 });
 
 router.get('/reserva/editar/:id', async function(req, res, next){
-  var reserva = await Reservas.findById(req.params.id);
+  var reservas = await Reservas.findById(req.params.id);
   var potenciales = await Clientes.find();
+  var pagos = await Pagos.find({reserva:reservas._id, dni:reservas.dni});
+  
+  console.log(reservas.cursoCodigo);
+  
+  var cursos = await Cursos.findOne({codigo: reservas.cursoCodigo});
+  console.log(cursos);
   var data = {
     title: 'Reservas',
     usuario: req.user,
-    reserva: reserva,
+    reserva: reservas,
+    pago: pagos,
+    curso: cursos,
     potenciales: potenciales
   }
   res.render('ventas/reservas/editar',data)
@@ -245,6 +254,7 @@ router.post('/reserva/editar/:id', function(req, res, next){
       res.redirect('/ventas/reservas/'+req.body.cursoCodigo);
     }
   )
+  res.redirect('/ventas/reservas/'+req.body.cursoCodigo);
 });
 
 router.get('/reserva/borrar/:codigo/:id', async function(req, res, next){
@@ -274,13 +284,12 @@ router.get('/pagos/:dni', async function(req, res, next){
   }
   res.render('ventas/pagos/list',data)
 });
-router.get('/pagos/nuevo/:id', async function(req, res, next){
+router.get('/pagos/nuevo/:id/:dni', async function(req, res, next){
   console.log(req.params.id);
   //var cliente = await Clientes.findById(req.params.id);
   //console.log(cliente);
-  var user = await Usuarios.find({dni:req.params.id});
-  var reserva = await Reservas.find({dni:req.params.id, estado:"Pendiente"});
-  console.log(reserva);
+  var reserva = await Reservas.findOne({_id:req.params.id, estado:"Pendiente"});
+  var user = await Usuarios.findOne({dni:req.params.dni});
   //var pagos = await reservas.find();
   var data = {
     title: 'Pagos',
@@ -291,6 +300,9 @@ router.get('/pagos/nuevo/:id', async function(req, res, next){
 });
 router.post('/pagos/nuevo/', async function(req, res, next){
   var datos = [];
+  console.log("----------------------------------------------------------");
+  //console.log(req);
+  console.log("----------------------------------------------------------");
   var form = new formidable.IncomingForm();
   form.parse(req);
   form.on('field', function(name, field) {
@@ -308,24 +320,26 @@ router.post('/pagos/nuevo/', async function(req, res, next){
       file.path = 'public/archivos/'+reserva+'-'+fecha+'-'+name+'.'+extension;
   }).on('end', function(){
     var query = { '_id':  datos.reserva};
-    var data= new Object;
-    data['montoPagado'] = datos.monto;
-    Reservas.findByIdAndUpdate(query,data,{new: true},
-    (err, todo) => {
+    Reservas.findOne(query,
+    (err, reserva) => {
       if (err) return res.status(500).send(err);
       var pago = new Pagos();
       for(key in datos){
         pago[key] = datos[key];
       }
-      pago.cursoNombre = reserva.cursoNombre;
-      pago.save().then(function(){
-        return res.redirect('/ventas/pagos/');
+      reserva.montoPagado = reserva.montoPagado + datos.monto;
+      reserva.save().then(function(){
+        pago.cursoNombre = reserva.cursoNombre;
+        pago.save().then(function(){
+          return res.redirect('/ventas/reserva/editar/'+reserva._id);
+        }).catch(next);
       }).catch(next);
+      
     }
   )
     
   });
-  
+  return res.redirect('/ventas/reserva/editar/'+reserva._id);
 });
 
 router.get('/pagos/editar/:id', async function(req, res, next){
@@ -335,10 +349,13 @@ router.get('/pagos/editar/:id', async function(req, res, next){
     usuario: req.user,
     pago: pago,
   }
-  res.render('ventas/pagos/editar',data)
+  res.render('/pagos/editar',data)
 });
 router.post('/pagos/editar/:id', async function(req, res, next){
   var datos = [];
+  console.log("-------------------------------------------------------------------");
+  console.log(req.body);
+  console.log("-------------------------------------------------------------------");
   var form = new formidable.IncomingForm();
   form.parse(req);
   form.on('field', function(name, field) {
@@ -355,9 +372,14 @@ router.post('/pagos/editar/:id', async function(req, res, next){
           extension = file.name.split('.').pop();
       file.path = 'public/archivos/'+reserva+'-'+fecha+'-'+name+'.'+extension;
   }).on('end', function(){
+    console.log(datos);
     var query = { '_id':  datos.reserva};
     var data= new Object;
     data['montoPagado'] = datos.monto;
+    console.log("-------------------------------------------------------------------");
+    console.log(query);
+    console.log(data);
+    console.log("-------------------------------------------------------------------");
     Reservas.findByIdAndUpdate(query,data,{new: true},
     (err, todo) => {
       if (err) return res.status(500).send(err);
@@ -372,6 +394,7 @@ router.post('/pagos/editar/:id', async function(req, res, next){
       }).catch(next);
     })
   });
+  res.redirect('/ventas/pagos/');
 });
 router.get('/pagos/borrar/:reserva/:id', async function(req, res, next){
   var pago = await Pagos.findById(req.params.id);

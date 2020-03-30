@@ -17,6 +17,14 @@ block content
                                     h5.c-grey-900= reserva.cursoCodigo +' - '+reserva.cursoNombre
                                     p Cliente: 
                                       = reserva.dni +' - '+reserva.potencialNombre
+                                    p Costo del Curso:
+                                     = ' '+curso.precio
+                                    p Cuotas del Curso:
+                                     = ' '+curso.cuotas
+                                    p Monto Pagado:
+                                     = ' '+reserva.montoPagado
+                                    p Monto Pendiente:
+                                        = ( curso.precio - reserva.montoPagado)
                                     .form-group
                                         p Fecha de reserva
                                         .timepicker-input.input-icon.form-group
@@ -39,5 +47,161 @@ block content
                                         textarea.form-control(placeholder="Comentarios" name="comentarios")= reserva.comentarios
                                     a.btn.btn-secondary(href="/ventas/reservas/"+reserva.cursoCodigo class="mr-2") Cancelar
                                     input.btn.btn-primary(type='submit' value="Guardar")   
-                    
-    include ../../footer 
+                        h4.c-grey-900.mT-10.mB-30 Pagos
+                            .text-center.text-md-right.mb-3 
+                                        a(href='/ventas/pagos/nuevo/'+reserva._id+'/'+reserva.dni class="btn btn-primary") Nuevo Pago   
+                        .bgc-white.bd.bdrs-3.p-20.mB-20.position-relative                                        
+                                    .tablaEditable
+                                        table#dataTable.table.table-striped.table-bordered(cellspacing='0', width='100%')
+                                            thead
+                                                tr
+                                                    th
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Curso
+                                                    th Documento   
+                                                    th fecha de reserva
+                                                    th Monto 
+                                                    th Estado
+                                                    th
+                                            tfoot
+                                                tr
+                                                    th 
+                                                    th Nombre Completo
+                                                    th DNI
+                                                    th Curso
+                                                    th Documento   
+                                                    th fecha de reserva
+                                                    th Monto 
+                                                    th Estado
+                                                    th
+                                            tbody
+                                                if pago
+                                                    - var indice = 0 
+                                                    each pendiente in pago
+                                                        tr(data-reserva=pendiente.reserva data-id=pendiente._id data-img=pendiente.imgDeposito class = "rap") 
+                                                            td.id
+                                                            td.vendedorNombre= pendiente.clienteNombre
+                                                            td.potencialNombre= pendiente.dni
+                                                            td.cursoNombre= pendiente.cursoNombre
+                                                            td.documento= pendiente.documento
+                                                            td.fecha= pendiente.fecha
+                                                            td.monto= pendiente.monto
+                                                            td.estado= pendiente.estado
+                                                            td
+                                                              a(target='_blank' href=pendiente.imgDeposito) Ver imagen
+                                                            td.text-right
+                                                                a.editar(data-index=indice onClick='myFunction('+indice+')' data-toggle='modal' data-target='#exampleModalCenter')
+                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                - var eliminarLink = "/ventas/pagos/borrar/"+pendiente.reserva+'/'+pendiente._id;
+                                                                a.borrar(href=eliminarLink)
+                                                                    i.c-red-500.ti-close
+                                                        - indice = indice + 1;
+
+                                                            #exampleModalCenter.modal.fade.fullModal(data-index=-1 tabindex='-1' role='dialog' aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                                .modal-dialog.modal-dialog-centered(role='document')
+                                                                    .modal-content
+                                                                        .modal-header
+                                                                            h5#exampleModalCenterTitle.modal-title Editar Pago
+                                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                            span(aria-hidden='true') &times;
+                                                                        .modal-body
+                                                                            .row.justify-content-center
+                                                                                .col-md-8
+                                                                                    form(class="rep" action="/ventas/pagos/editar/", method="POST", enctype="multipart/form-data" )
+                                                                                        input(type='hidden' name="_id" value=pago.id)
+                                                                                        input(type='hidden' name="clienteNombre" value=pago.id)
+                                                                                        input(type='hidden' name="dni" value=pago.id)
+                                                                                        input(type='hidden' name="cursoNombre" value=pago.id)
+                                                                                        input(type='hidden' name="reserva" value=pago.id)
+                                                                                        .form-group  
+                                                                                            p Documento
+                                                                                            input.form-control(type="text" value=pago.documento class="documento" placeholder="Documento" name="documento")
+                                                                                        .form-group  
+                                                                                            p Monto
+                                                                                            input.form-control(type="number" value=pago.monto placeholder="Monto" name="monto")
+                                                                                        .form-group  
+                                                                                            p Estado
+                                                                                            input.form-control(type="text" value=pago.estado placeholder="Estado" name="Estado")
+                                                                                        .form-group
+                                                                                            p Fecha
+                                                                                            .timepicker-input.input-icon.form-group
+                                                                                                .input-group
+                                                                                                    .input-group-addon.bgc-white.bd.bdwR-0
+                                                                                                        i.ti-calendar
+                                                                                                    input.form-control.bdc-grey-200.start-date(type='text', value=pago.fecha placeholder='Fecha', name="fecha", data-provide='datepicker' )
+                                                                                        .form-group   
+                                                                                            p Imagen del deposito
+                                                                                            input.form-control(type="file" name="imgDeposito" accept="image/png, image/jpeg, .pdf")
+                                                                                        
+                                                                                        .form-group
+                                                                                            a.btn.btn-secondary(type='button' data-dismiss='modal' aria-label='Close' href='#') Cancelar
+                                                                                            input.btn.btn-primary(type='submit' value="Guardar")
+                                                                            .modal-footer
+                                                                                
+       
+    script.
+        // When the user clicks on div, open the popup
+        var index;
+        function myFunction(indice) {
+            //console.log("pussy");
+            //console.log(indice);
+            index = indice;
+            var popup = document.getElementsByClassName("rap");
+            var e;
+            var f = document.getElementsByClassName("documento");
+            //console.log(f);
+            //popup.classList.toggle("show");
+            //console.log(indice); 
+            //console.  (popup[indice].cells[0].firstChild);
+            //console.log(popup[indice].cells[1].firstChild);
+            //console.log(popup[indice].cells[2].firstChild);
+            //console.log(popup[indice].cells[3].firstChild);
+            //console.log(popup[indice].cells[4].firstChild);
+            //console.log(popup[indice].cells[5].firstChild);
+            //console.log(popup[indice].cells[6].firstChild);
+            //console.log(popup[indice].cells[7].firstChild);
+            var a = document.getElementsByClassName("rep");
+            //console.log(a[0].elements);
+            //console.log(a[0].action);
+            console.log(popup[indice].attributes);
+            console.log(popup[indice].attributes[1].value);
+            console.log(popup[indice].attributes[3].value);
+            a[0].action = a[0].action+''+popup[indice].attributes[2].value;
+            //console.log(a[0].action);
+            //id = popup[indice].cells[0].firstChild.data;
+            a[0].elements[0].value = popup[indice].attributes[1].value;
+            a[0].elements[1].value = popup[indice].cells[1].firstChild.data;
+            a[0].elements[2].value = popup[indice].cells[2].firstChild.data;
+            a[0].elements[3].value = popup[indice].cells[3].firstChild.data;
+            e = popup[indice].cells[4].firstChild;
+            //console.log(e.data);
+            f[0].value = e.data;
+            console.log(a[0].elements);
+            //console.log(e);
+            //console.log(popup[indice].cells[4].lastChild);
+            //console.log(a[0].elements[4].firstChild);
+            a[0].elements[5].value = e.data
+            a[0].elements[6].value = popup[indice].cells[6].firstChild.data;
+            a[0].elements[7].value = popup[indice].cells[7].firstChild.data;
+            a[0].elements[8].value = popup[indice].cells[5].firstChild.data;
+            a[0].elements[4].value = popup[indice].attributes[1].value;
+            console.log(a[0].elements[9]);
+            console.log(a[0].elements);
+            /*
+            console.log(a[0].elements[0].value);
+            console.log(a[0].elements[1].value;
+            console.log(a[0].elements[2].value);
+            console.log(a[0].elements[3].value);
+            console.log(a[0].elements[4].value);
+            console.log(a[0].elements[5].value);
+            console.log(a[0].elements[6].value);
+            console.log(a[0].elements[7].value);
+            */
+            //var modal = document.getElementByClass("FullModal");
+            //console.log(modal);
+          
+        }
+
+
+    include ../../footer

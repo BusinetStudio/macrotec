@@ -125,12 +125,9 @@ block content
                                                             td= 'S/.'+pendiente.montoPagado
                                                             td= pendiente.comentarios
                                                             td.text-right
-                                                                a.c-green-500.mr-4(href='/ventas/pagos/nuevo/'+pendiente._id)
-                                                                    i.c-white-500.ti-plus.mr-2
-                                                                    = 'Pago'
                                                                 - var editarLink = "/ventas/reserva/editar/"+pendiente._id;
                                                                 a.editar(href=editarLink)
-                                                                    i.c-orange-500.ti-pencil.mr-2
+                                                                    i.c-green-500.ti-layout-list-thumb.mr-4
                                                                 - var eliminarLink = "/ventas/reserva/borrar/"+pendiente.cursoCodigo+'/'+pendiente._id;
                                                                 a.borrar(href=eliminarLink)
                                                                     i.c-red-500.ti-close

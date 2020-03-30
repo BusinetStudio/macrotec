@@ -227,10 +227,10 @@ router.get('/reserva/editar/:id', async function(req, res, next){
   var potenciales = await Clientes.find();
   var pagos = await Pagos.find({reserva:reservas._id, dni:reservas.dni});
   
-  console.log(reservas.cursoCodigo);
+  //console.log(reservas.cursoCodigo);
   
   var cursos = await Cursos.findOne({codigo: reservas.cursoCodigo});
-  console.log(cursos);
+  //console.log(cursos);
   var data = {
     title: 'Reservas',
     usuario: req.user,
@@ -285,7 +285,7 @@ router.get('/pagos/:dni', async function(req, res, next){
   res.render('ventas/pagos/list',data)
 });
 router.get('/pagos/nuevo/:id/:dni', async function(req, res, next){
-  console.log(req.params.id);
+  //console.log(req.params.id);
   //var cliente = await Clientes.findById(req.params.id);
   //console.log(cliente);
   var reserva = await Reservas.findOne({_id:req.params.id, estado:"Pendiente"});
@@ -301,10 +301,11 @@ router.get('/pagos/nuevo/:id/:dni', async function(req, res, next){
 router.post('/pagos/nuevo/', async function(req, res, next){
   var datos = [];
   console.log("----------------------------------------------------------");
-  //console.log(req);
+  //console.log(req.form);
   console.log("----------------------------------------------------------");
   var form = new formidable.IncomingForm();
   form.parse(req);
+  
   form.on('field', function(name, field) {
       datos[name] = field;
   }).on('file', function(name, file){
@@ -327,7 +328,7 @@ router.post('/pagos/nuevo/', async function(req, res, next){
       for(key in datos){
         pago[key] = datos[key];
       }
-      reserva.montoPagado = reserva.montoPagado + datos.monto;
+      reserva.montoPagado = parseFloat(reserva.montoPagado) + parseFloat(datos.monto);
       reserva.save().then(function(){
         pago.cursoNombre = reserva.cursoNombre;
         pago.save().then(function(){
@@ -354,13 +355,23 @@ router.get('/pagos/editar/:id', async function(req, res, next){
 router.post('/pagos/editar/:id', async function(req, res, next){
   var datos = [];
   console.log("-------------------------------------------------------------------");
-  console.log(req.body);
+  console.log('ENTRE AL EDITAR');
   console.log("-------------------------------------------------------------------");
+  //console.log(req);
+  console.log("-------------------------------------------------------------------");
+  //console.log(req.data);
   var form = new formidable.IncomingForm();
   form.parse(req);
+  console.log(form.field);
+  console.log("-------------------------------------------------------------------");
   form.on('field', function(name, field) {
+      //zconsole.log(name);
+      //console.log(':');
+      //console.log(field);
       datos[name] = field;
   }).on('file', function(name, file){
+      //console.log(datos);
+      console.log(datos);
       var url =  req.protocol + '://' + req.get('host');
       var reserva = datos.reserva.replace(/"/g, ''),
           fecha = datos.fecha.replace(/"/g,''),
@@ -372,38 +383,52 @@ router.post('/pagos/editar/:id', async function(req, res, next){
           extension = file.name.split('.').pop();
       file.path = 'public/archivos/'+reserva+'-'+fecha+'-'+name+'.'+extension;
   }).on('end', function(){
-    console.log(datos);
+    //console.log(datos);
     var query = { '_id':  datos.reserva};
-    var data= new Object;
-    data['montoPagado'] = datos.monto;
-    console.log("-------------------------------------------------------------------");
-    console.log(query);
-    console.log(data);
-    console.log("-------------------------------------------------------------------");
-    Reservas.findByIdAndUpdate(query,data,{new: true},
-    (err, todo) => {
+    var dataD= new Object;
+    dataD['montoPagado'] = datos.monto;
+    //console.log("-------------------------------------------------------------------");
+    //console.log(query);
+    //console.log(data);
+    //console.log("-------------------------------------------------------------------");
+    //console.log(query);
+    Reservas.findById(query,{new: true},
+    (err, reserva) => {
+      
       if (err) return res.status(500).send(err);
       var data= new Object;
       for(key in datos){
         data[key] = datos[key];
       }
-      Pagos.findByIdAndUpdate({'_id': req.params.id},data,{new: true},
-      (err, todo) => {
+      Pagos.findById({'_id': req.params.id},{new: true},
+      (err, pago) => {
         if (err) return res.status(500).send(err);
-        res.redirect('/ventas/pagos/');
+
+        
+        reserva.montoPagado = reserva.montoPagado - pago.monto;
+        reserva.montoPagado = reserva.montoPagado + data.monto;
+        pago.monto = data.monto;
+        console.log(data);
+        pago.save(data);
+        reserva.save();
+        console.log("TERMINE");
+        return res.redirect('/ventas/reservas');
       }).catch(next);
     })
   });
-  res.redirect('/ventas/pagos/');
+  //res.redirect('/ventas/reservas');
 });
 router.get('/pagos/borrar/:reserva/:id', async function(req, res, next){
+  console.log("BORRAR PAGO");
   var pago = await Pagos.findById(req.params.id);
   await Reservas.findByIdAndUpdate({'_id': req.params.reserva},{ $inc: {montoPagado: -pago.monto}},{new:true})
-  
-  Pagos.findByIdAndRemove(req.params.id, function(err, result) {
+  console.log("RESERVA");
+  await Pagos.findByIdAndRemove(req.params.id, function(err, result) {
+    console.log("PAGO BORRADo");
     if(err) return res.status(500).send(err);
-    if(result) res.redirect('/ventas/pagos/');
+    if(result) res.redirect('/ventas/reservas');
   });
+  
 });
 
 

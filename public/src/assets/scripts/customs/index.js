@@ -81,6 +81,7 @@ export default (function () {
         $( "form.validate" ).submit(function( event ) {
           var form = $(this);
           var url = form.attr('action');
+          //console.log("VALIDACION")
           event.preventDefault();
           $.ajax({
             method: "POST",

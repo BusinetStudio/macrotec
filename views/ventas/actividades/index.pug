@@ -49,6 +49,7 @@ block content
                                                 span.peer.peer-greed= actividad.actividad
                                                   = ' - '+actividad.usuario_nombre
                                                   span.badge.badge-pill.ml-3.badge-success.lh-0.p-10= actividad.fecha
+                                                  span.badge.badge-pill.ml-3.badge-success.lh-0.p-10= "Hora: "+actividad.hora
                                                 span.peers
                                                   a.borrar(href='/ventas/actividades/'+potencial._id+'/borrar/'+actividad._id)
                                                     i.c-red-500.ti-close
@@ -76,6 +77,7 @@ block content
                                                 label.peers.peer-greed.js-sb.ai-c(for=tarea._id)
                                                   span.peer.peer-greed=tarea.tarea
                                                     span.badge.badge-pill.ml-3.badge-success.lh-0.p-10=tarea.fecha
+                                                    span.badge.badge-pill.ml-3.badge-success.lh-0.p-10="Hora: "+tarea.hora
                                                   span.peers 
                                                     a.borrar(href='/ventas/tareas/'+potencial._id+'/borrar/'+tarea._id)
                                                       i.c-red-500.ti-close
